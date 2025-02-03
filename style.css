@@ -1,0 +1,210 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    color: #ddd;
+}
+
+td,
+th {
+    border: 2px solid #333;
+    text-align: left;
+    padding: 8px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+td:nth-child(1) {
+    text-align: center;
+    width: 3em;
+}
+
+td:nth-child(2) {
+    font-weight: bold;
+    white-space: nowrap;
+    width: 6.5em;
+}
+
+td:nth-child(3) {
+    font-weight: bold;
+    white-space: nowrap;
+    width: 6.5em;
+}
+
+td:nth-child(4) {
+    width: 16em;
+}
+
+tr:hover {
+    background-color: #3D3D3D;
+}
+
+tr td {
+    padding-top: 0em;
+}
+
+rt {
+    color: #ddd;
+    font-size: 0.6em;
+}
+
+table.no-spacing {
+    border-spacing: 0;
+    /* Removes the cell spacing via CSS */
+    border-collapse: collapse;
+    /* Optional - if you don't want to have double border where cells touch */
+}
+
+body {
+    margin: 0;
+    background-color: #252525;
+    /* background-image: url('noise.png'); */
+}
+
+p {
+    margin: auto;
+    color: #ddd;
+}
+
+/* .furigana {
+    display: none;
+}
+.vocab-cell:hover .furigana {
+    display: inline;
+} */
+
+.furigana {
+    display: none;
+}
+.vocab-cell:active .furigana {
+    display: inline;
+}
+/* .vocab-cell:active {
+    background-color: #f0f8ff;
+} */
+
+
+/* .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+} */
+nav {
+    position: sticky;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-block;
+    border: 2px solid #EBECF1;
+    border-radius: 30px;
+    animation: slide-in 1s ease-out;
+}
+
+ul {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    margin: 0;
+    padding: 0 30px;
+    list-style-type: none;
+
+    li:not(:last-child) {
+        margin-right: 40px;
+    }
+
+    li {
+        border: 2px solid transparent;
+        border-radius: 5px;
+        padding: 10px;
+        transition: background 0.2s;
+
+        a {
+            color: #2375D8;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        ul {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            display: block;
+            margin: 12px -12px;
+            padding: 0;
+            background: #0373fc;
+            border: 2px solid #0d327a;
+            /* border-right: 2px solid #C9AAF7;
+            border-bottom: 2px solid #C9AAF7; */
+            border-radius: 5px;
+            transition: opacity 0.2s, visibility 0.2s;
+
+            li {
+                margin: -2px 0 0 -2px;
+                width: calc(100% - 20px);
+                line-height: 1.7;
+                color: #FFFFFF;
+
+                a {
+                    color: #2375D8;
+                }
+            }
+        }
+
+        &:hover {
+            background: #0d327a;
+            border: 2px solid #FFFFFF;
+            /* border-right: 2px solid #E02A21;
+            border-bottom: 2px solid #E02A21; */
+
+            a {
+                color: #F9F8FD;
+            }
+
+            ul {
+                visibility: visible;
+                opacity: 1;
+                /* box-shadow: 0px 3px 5px 2px #EBECF1; */
+
+                li {
+                    a {
+                        /* color: #F9F8FD; */
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* @keyframes slide-in {
+    0% {
+        top: -50px;
+    }
+
+    40% {
+        top: 20px;
+    }
+
+    70% {
+        top: 10px;
+    }
+
+    100% {
+        top: 15px;
+    }
+} */

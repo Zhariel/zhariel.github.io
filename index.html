@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+<div style="display: flex; flex-direction: column;">
+    <div style="display: flex; flex-direction: row;">
+        <nav>
+            <ul id="vocab">
+                <li>
+                    <div style="width: 100%;"><p>1</p></div>
+                    <ul>
+                        <li>
+                            <button onclick="core(1)">All</button>
+                        </li>
+                        <li>
+                            <button onclick="verbs(1)">Verbs</button>
+                        </li>
+                        <li>
+                            <button onclick="nouns(1)">Nouns</button>
+                        </li>
+                        <li>
+                            <button onclick="adv(1)">Adverbs</button>
+                        </li>
+                        <li>
+                            <button onclick="adj(1)">Adjectives</button>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p>2</p>
+                    <ul>
+                        <li>
+                            <button onclick="core(2)">All</button>
+                        </li>
+                        <li>
+                            <button onclick="verbs(2)">Verbs</button>
+                        </li>
+                        <li>
+                            <button onclick="nouns(2)">Nouns</button>
+                        </li>
+                        <li>
+                            <button onclick="adv(2)">Adverbs</button>
+                        </li>
+                        <li>
+                            <button onclick="adj(2)">Adjectives</button>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p>3</p>
+                    <ul>
+                        <li>
+                            <button onclick="core(3)">All</button>
+                        </li>
+                        <li>
+                            <button onclick="verbs(3)">Verbs</button>
+                        </li>
+                        <li>
+                            <button onclick="nouns(3)">Nouns</button>
+                        </li>
+                        <li>
+                            <button onclick="adv(3)">Adverbs</button>
+                        </li>
+                        <li>
+                            <button onclick="adj(3)">Adjectives</button>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p>4</p>
+                    <ul>
+                        <li>
+                            <button onclick="core(4)">All</button>
+                        </li>
+                        <li>
+                            <button onclick="verbs(4)">Verbs</button>
+                        </li>
+                        <li>
+                            <button onclick="nouns(4)">Nouns</button>
+                        </li>
+                        <li>
+                            <button onclick="adv(4)">Adverbs</button>
+                        </li>
+                        <li>
+                            <button onclick="adj(4)">Adjectives</button>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p>5</p>
+                    <ul>
+                        <li>
+                            <button onclick="core(5)">All</button>
+                        </li>
+                        <li>
+                            <button onclick="verbs(5)">Verbs</button>
+                        </li>
+                        <li>
+                            <button onclick="nouns(5)">Nouns</button>
+                        </li>
+                        <li>
+                            <button onclick="adv(5)">Adverbs</button>
+                        </li>
+                        <li>
+                            <button onclick="adj(5)">Adjectives</button>
+                        </li>
+                    </ul>
+            </ul>
+        </nav>
+    </div>
+    <div id="data"></div>
+</div>
+
+<script>
+    core(1)
+
+    function addHTML(name) {
+        fetch('vocab/' + name)
+            .then(response => response.text())
+            .then(csvText => {
+                let html = '<table>';
+                let i = 0;
+                csvText.split('\n').forEach(row => {
+                    html += '<tr><td>' + i + '</td>';
+                    row.split(',').forEach(column => {
+                        column = column.replace(/<rt>(.*?)<\/rt>/g, '<rt><span class="furigana">$1</span></rt>');
+                        html += '<td class="vocab-cell">' + column + '</td>';
+                    });
+                    html += '</tr>';
+                    i++;
+                });
+                html += '</table>';
+                document.getElementById('data').innerHTML = html;
+            })
+            .catch(error => console.error('Error fetching CSV:', error));
+
+        document.addEventListener("click", (e) => {
+            if (e.target.classList.contains("vocab-cell")) {
+                document.querySelectorAll(".vocab-cell").forEach(cell => cell.classList.remove("clicked"));
+                e.target.classList.add("clicked");
+            }
+        });
+    }
+    
+    function adj(num) {
+        addHTML(num + "adjectives.csv")
+    }
+
+    function adv(num) {
+        addHTML(num + "adverbs.csv")
+    }
+
+    function nouns(num) {
+        addHTML(num + "nouns.csv")
+    }
+
+    function verbs(num) {
+        addHTML(num + "verbs.csv")
+    }
+
+    function core(num) {
+        addHTML(num + "all.csv")
+    }
+</script>
+</body>
+
+</html>
