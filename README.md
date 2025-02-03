@@ -1,4 +1,4 @@
-Web viewer for the Core10k deck.
+Web viewer for the Core10k deck. (WIP)
 
 The deck is broken up into 10 sections, and further into verbs, nouns, adverbs, and adjectives.
 
