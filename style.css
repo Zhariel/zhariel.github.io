@@ -111,7 +111,7 @@ nav {
     transform: translateX(-50%);
     display: inline-block;
     border: 2px solid #EBECF1;
-    border-radius: 30px;
+    border-radius: 5px;
     animation: slide-in 1s ease-out;
 }
 
