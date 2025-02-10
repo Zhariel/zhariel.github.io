@@ -38,10 +38,13 @@
                 counter++
             }))
             .then(_ => {
-                document.getElementById('navbar').innerHTML = html;
+                console.log(html)
+                res = `<li><p>Jlpt</p><ul><li><button onClick="addHTML('jlpt/n5.csv')">N5</button></li>`
+                res += `<li><button onClick="addHTML('jlpt/n4.csv')">N4</button></li></ul></li>`
+                res += html
+                document.getElementById('navbar').innerHTML = res;
             })
             .catch(error => console.error('Error:', error));
-
     }
 
     function addHTML(name) {
