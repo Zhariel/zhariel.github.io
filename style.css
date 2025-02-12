@@ -75,7 +75,6 @@ p {
 
 nav {
     position: sticky;
-    top: 15px;
     margin:auto;
     margin-top: 5px;
     margin-bottom: 20px;
@@ -94,7 +93,7 @@ ul {
     list-style-type: none;
 
     li:not(:last-child) {
-        margin-right: 40px;
+        margin-right: 15px;
     }
 
     li {
