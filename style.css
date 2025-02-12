@@ -52,9 +52,7 @@ rt {
 
 table.no-spacing {
     border-spacing: 0;
-    /* Removes the cell spacing via CSS */
     border-collapse: collapse;
-    /* Optional - if you don't want to have double border where cells touch */
 }
 
 body {
@@ -68,47 +66,19 @@ p {
     color: #ddd;
 }
 
-/* .furigana {
-    display: none;
-}
-.vocab-cell:hover .furigana {
-    display: inline;
-} */
-
 .furigana {
     display: none;
 }
 .vocab-cell:active .furigana {
     display: inline;
 }
-/* .vocab-cell:active {
-    background-color: #f0f8ff;
-} */
 
-
-/* .dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    padding: 12px 16px;
-    z-index: 1;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-} */
 nav {
     position: sticky;
     top: 15px;
-    left: 50%;
-    transform: translateX(-50%);
+    margin:auto;
+    margin-top: 5px;
+    margin-bottom: 20px;
     display: inline-block;
     border: 2px solid #EBECF1;
     border-radius: 5px;
@@ -169,8 +139,6 @@ ul {
         &:hover {
             background: #0d327a;
             border: 2px solid #FFFFFF;
-            /* border-right: 2px solid #E02A21;
-            border-bottom: 2px solid #E02A21; */
 
             a {
                 color: #F9F8FD;
@@ -179,32 +147,7 @@ ul {
             ul {
                 visibility: visible;
                 opacity: 1;
-                /* box-shadow: 0px 3px 5px 2px #EBECF1; */
-
-                li {
-                    a {
-                        /* color: #F9F8FD; */
-                    }
-                }
             }
         }
     }
 }
-
-/* @keyframes slide-in {
-    0% {
-        top: -50px;
-    }
-
-    40% {
-        top: 20px;
-    }
-
-    70% {
-        top: 10px;
-    }
-
-    100% {
-        top: 15px;
-    }
-} */
