@@ -43,11 +43,11 @@ td:nth-child(4) {
 td:nth-child(5) {
     width: 16em;
     min-width: 30%;
-    /* text-wrap: wrap; */
+    text-wrap: nowrap;
 }
 
 tr:hover {
-    background-color: #3D3D3D;
+    background-color: #303030;
 }
 
 tr td {
