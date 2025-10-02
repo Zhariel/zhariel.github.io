@@ -43,7 +43,7 @@ td:nth-child(4) {
 
 td:nth-child(5) {
     /* width: 16em; */
-    min-width: 14em;
+    min-width: 26em;
     max-width: 40ch;
     overflow-wrap: break-word;
     word-wrap: break-word;
