@@ -9,74 +9,94 @@
 </head>
 
 <body>
-<div style="display: flex; flex-direction: column;">
-    <div style="display: flex; flex-direction: row;">
-        <nav>
-            <ul id="navbar">
-            </ul>
-        </nav>
+    <div style="display: flex; flex-direction: column;">
+        <div style="display: flex; flex-direction: row;">
+            <nav>
+                <ul id="navbar">
+                </ul>
+            </nav>
+        <button id="unhideAll">Unhide All</button>
+        </div>
+        <div id="data"></div>
     </div>
-    <div id="data"></div>
-</div>
 
-<script>
-    addHTML('core/' + 1 + 'all.csv')
+    <script>
 
-    function renderList() {
-        let html = '';
-        let counter = 1
-        const data = fetch('source.json')
-            .then(response => response.json())
-            .then(data => data.forEach(item => {
-                html += `<li><p>${counter}</p><ul>`
-                item.forEach(it => {
-                    console.log(`${it}`)
-                    html += `<li><button onClick="addHTML('core/${counter}${it}.csv')">${it}</button></li>`
+        function renderNavbar() {
+            let html = '';
+            let counter = 1
+            const data = fetch('source.json')
+                .then(response => response.json())
+                .then(data => data.forEach(item => {
+                    html += `<li><p>${counter}</p><ul>`
+                    item.forEach(it => {
+                        html += `<li><button onClick="addWordList('core/${counter}${it}.csv')">${it}</button></li>`
+                    })
+                    html += `</ul></li>`
+                    counter++
+                }))
+                .then(_ => {
+                    res = `<li><p>Jlpt</p><ul><li><button onClick="addWordList('jlpt/n5.csv')">N5</button></li>`
+                    res += `<li><button onClick="addWordList('jlpt/n4.csv')">N4</button></li></ul></li>`
+                    res += html
+                    document.getElementById('navbar').innerHTML = res;
                 })
-                html += `</ul></li>`
-                counter++
-            }))
-            .then(_ => {
-                console.log(html)
-                res = `<li><p>Jlpt</p><ul><li><button onClick="addHTML('jlpt/n5.csv')">N5</button></li>`
-                res += `<li><button onClick="addHTML('jlpt/n4.csv')">N4</button></li></ul></li>`
-                res += html
-                document.getElementById('navbar').innerHTML = res;
-            })
-            .catch(error => console.error('Error:', error));
-    }
+                .catch(error => console.error('Error:', error));
+        }
 
-    function addHTML(name) {
-        fetch('vocab/' + name)
-            .then(response => response.text())
-            .then(csvText => {
-                let html = '<table>';
-                let i = 0;
-                csvText.split('\n').forEach(row => {
-                    html += '<tr><td>' + i + '</td>';
-                    row.split(',').forEach(column => {
-                        column = column.replace(/<rt>(.*?)<\/rt>/g, '<rt><span class="furigana">$1</span></rt>');
-                        html += '<td class="vocab-cell">' + column + '</td>';
+        function addWordList(name) {
+            fetch('vocab/' + name)
+                .then(response => response.text())
+                .then(csvText => {
+                    let html = '<table id="vocabList">';
+                    let i = 0;
+                    csvText.split('\n').forEach(row => {
+                        html += '<tr><td>' + i + '</td>';
+                        row.split(',').forEach(column => {
+                            column = column.replace(/<rt>(.*?)<\/rt>/g, '<rt><span class="furigana">$1</span></rt>');
+                            html += '<td class="vocab-cell">' + column + '</td>';
+                        });
+                        html += '</tr>';
+                        i++;
                     });
-                    html += '</tr>';
-                    i++;
-                });
-                html += '</table>';
-                document.getElementById('data').innerHTML = html;
-            })
-            .catch(error => console.error('Error fetching CSV:', error));
+                    html += '</table>';
+                    document.getElementById('data').innerHTML = html;
 
-        document.addEventListener("click", (e) => {
-            if (e.target.classList.contains("vocab-cell")) {
-                document.querySelectorAll(".vocab-cell").forEach(cell => cell.classList.remove("clicked"));
-                e.target.classList.add("clicked");
-            }
-        });
-    }
+                    const table = document.getElementById("vocabList");
+                    let hidden = JSON.parse(localStorage.getItem("hiddenRows") || "[]");
 
-    renderList();
+                    [...table.rows].forEach((r, i) => {
+                        if (i && hidden.includes(i)) collapse(r, i);
+                        r.onclick = e => {
+                            if (e.ctrlKey) { collapse(r, i); hidden.push(i); localStorage.setItem("hiddenRows", JSON.stringify(hidden)); }
+                        };
+                    });
+                    console.log("set up hidden")
+                })
+                .catch(error => console.error('Error fetching CSV:', error));
 
-</script>
+            document.addEventListener("click", (e) => {
+                if (e.target.classList.contains("vocab-cell")) {
+                    document.querySelectorAll(".vocab-cell").forEach(cell => cell.classList.remove("clicked"));
+                    e.target.classList.add("clicked");
+                }
+            });
+        }
+
+        addWordList('core/' + 1 + 'all.csv')
+
+        renderNavbar();
+
+        function collapse(row, i) {
+            console.log("collapsed")
+            let ph = document.createElement("tr");
+            ph.innerHTML = `<td colspan="${row.cells.length}" class="hiddenrow"><hr class="hiddenbar"></td>`;
+            ph.onclick = () => { ph.replaceWith(row); hidden = hidden.filter(x => x !== i); localStorage.setItem("hiddenRows", JSON.stringify(hidden)); };
+            row.replaceWith(ph);
+        }
+
+        document.getElementById("unhideAll").onclick = () => { localStorage.setItem("hiddenRows", "[]"); location.reload(); };
+    </script>
 </body>
 
 </html>

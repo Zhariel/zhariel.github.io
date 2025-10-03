@@ -16,6 +16,22 @@ th {
     font-weight: bold;
 }
 
+.hiddenrow {
+    cursor: pointer;
+    border: none;
+    height: 0;
+}
+
+.hiddenbar {
+    width: 30%;
+    margin: auto;
+    margin-top: 1px;
+    /* margin-bottom: px; */
+    color: #444;
+    /* box-shadow: 1px 1px 3px #333; */
+    height: 0px;
+}
+
 td:nth-child(1) {
     text-align: center;
     /* width: 3em; */
@@ -86,13 +102,14 @@ p {
 .furigana {
     display: none;
 }
+
 .vocab-cell:active .furigana {
     display: inline;
 }
 
 nav {
     position: sticky;
-    margin:auto;
+    margin: auto;
     margin-top: 5px;
     margin-bottom: 20px;
     display: inline-block;
