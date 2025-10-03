@@ -15,7 +15,7 @@
                 <ul id="navbar">
                 </ul>
             </nav>
-        <button id="unhideAll">Unhide All</button>
+            <button id="unhideAll">Unhide All</button>
         </div>
         <div id="data"></div>
     </div>
@@ -63,15 +63,18 @@
                     document.getElementById('data').innerHTML = html;
 
                     const table = document.getElementById("vocabList");
-                    let hidden = JSON.parse(localStorage.getItem("hiddenRows") || "[]");
+                    let hidden = JSON.parse(localStorage.getItem("hiddenRows_" + name) || "[]");
 
                     [...table.rows].forEach((r, i) => {
-                        if (i && hidden.includes(i)) collapse(r, i);
+                        if (i && hidden.includes(i)) collapse(r, i, name);
                         r.onclick = e => {
-                            if (e.ctrlKey) { collapse(r, i); hidden.push(i); localStorage.setItem("hiddenRows", JSON.stringify(hidden)); }
+                            if (e.ctrlKey) {
+                                collapse(r, i, name);
+                                hidden.push(i);
+                                localStorage.setItem("hiddenRows_" + name, JSON.stringify(hidden));
+                            }
                         };
                     });
-                    console.log("set up hidden")
                 })
                 .catch(error => console.error('Error fetching CSV:', error));
 
@@ -83,19 +86,24 @@
             });
         }
 
+        function collapse(row, i, name) {
+            let placeholder = document.createElement("tr");
+            placeholder.innerHTML = `<td colspan="${row.cells.length}" class="hiddenrow"><hr class="hiddenbar"></td>`;
+            placeholder.onclick = () => {
+                placeholder.replaceWith(row);
+                let hidden = JSON.parse(localStorage.getItem("hiddenRows_" + name) || "[]");
+                hidden = hidden.filter(x => x !== i);
+                localStorage.setItem("hiddenRows_" + name, JSON.stringify(hidden));
+            };
+            row.replaceWith(placeholder);
+        }
+
+
         addWordList('core/' + 1 + 'all.csv')
 
         renderNavbar();
 
-        function collapse(row, i) {
-            console.log("collapsed")
-            let ph = document.createElement("tr");
-            ph.innerHTML = `<td colspan="${row.cells.length}" class="hiddenrow"><hr class="hiddenbar"></td>`;
-            ph.onclick = () => { ph.replaceWith(row); hidden = hidden.filter(x => x !== i); localStorage.setItem("hiddenRows", JSON.stringify(hidden)); };
-            row.replaceWith(ph);
-        }
-
-        document.getElementById("unhideAll").onclick = () => { localStorage.setItem("hiddenRows", "[]"); location.reload(); };
+        document.getElementById("unhideAll").onclick = () => { Object.keys(localStorage).forEach(key => { if (key.startsWith("hiddenRows_")) localStorage.removeItem(key); }); location.reload(); };
     </script>
 </body>
 
