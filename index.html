@@ -12,8 +12,11 @@
     <div style="display: flex; flex-direction: column;">
         <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
             <div class="navdiv">
-                <nav><ul id="navbar"></ul></nav>
-                <button id="unhide" class="button-27">.</button>
+                <button class="btn2" onClick="addBacklog()">Backlog</button>
+                <nav>
+                    <ul id="navbar"></ul>
+                </nav>
+                <button id="unhide" class="btn">.</button>
             </div>
         </div>
         <div id="data"></div>
@@ -29,18 +32,23 @@
                 .then(data => data.forEach(item => {
                     html += `<li><p>${counter}</p><ul>`
                     item.forEach(it => {
-                        html += `<li><button onClick="addWordList('core/${counter}${it}.csv')">${it}</button></li>`
+                        html += `<li><a class="" onClick="addWordList('core/${counter}${it}.csv')">${it}</a></li>`
                     })
                     html += `</ul></li>`
                     counter++
                 }))
                 .then(_ => {
-                    res = `<li><p>Jlpt</p><ul><li><button onClick="addWordList('jlpt/n5.csv')">N5</button></li>`
-                    res += `<li><button onClick="addWordList('jlpt/n4.csv')">N4</button></li></ul></li>`
+                    res = `<li><p>Jlpt</p><ul><li><a class="" onClick="addWordList('jlpt/n5.csv')">N5</a></li>`
+                    res += `<li><a class="" onClick="addWordList('jlpt/n4.csv')">N4</a></li></ul></li>`
                     res += html
                     document.getElementById('navbar').innerHTML = res;
                 })
                 .catch(error => console.error('Error:', error));
+        }
+
+        function addBacklog() {
+            let backlog = JSON.parse(localStorage.getItem("hiddenRows_" + name) || "[]");
+            document.getElementById('data').innerHTML = backlog[0];
         }
 
         function addWordList(name) {
@@ -62,15 +70,18 @@
                     document.getElementById('data').innerHTML = html;
 
                     const table = document.getElementById("vocabList");
-                    let hidden = JSON.parse(localStorage.getItem("hiddenRows_" + name) || "[]");
+                    let clicked = JSON.parse(localStorage.getItem("hiddenRows_" + name) || "[]");
 
-                    [...table.rows].forEach((r, i) => {
-                        if (i && hidden.includes(i)) collapse(r, i, name);
-                        r.onclick = e => {
+                    [...table.rows].forEach((row, i) => {
+                        if (i && clicked.includes(i)) collapse(row, i, name);
+                        row.onclick = e => {
                             if (e.ctrlKey) {
-                                collapse(r, i, name);
-                                hidden.push(i);
-                                localStorage.setItem("hiddenRows_" + name, JSON.stringify(hidden));
+                                collapse(row, i, name);
+                                clicked.push(i);
+                                localStorage.setItem("hiddenRows_" + name, JSON.stringify(clicked));
+                            }
+                            else if (e.shiftKey) {
+                                localStorage.setItem("backlog", JSON.stringify(clicked));
                             }
                         };
                     });

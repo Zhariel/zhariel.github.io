@@ -30,12 +30,9 @@ th {
     /* box-shadow: 1px 1px 3px #333; */
 }
 
-.btn {}
-
-/* CSS */
-.button-27 {
-    background-color: #1C1C1C;
-    border: 2px solid #1C1C1C;
+.btn {
+    background-color: #171717;
+    border: 2px solid #171717;
     border-radius: 5px;
     box-sizing: border-box;
     color: #FFFFFF;
@@ -50,13 +47,33 @@ th {
     position: relative;
     margin: 0;
     margin-top: 3px;
-    height: 30px;
-    width: 30px;
-    left: 1%;
+    height: 20px;
+    width: 20px;
+    left: 3%;
 }
 
-.button-27:hover {
-    transform: translateY(-2px);
+.btn:hover {
+    /* transform: translateY(-1px); */
+    /* background-color: #444;
+    border: 2px solid #444; */
+}
+
+.btn2 {
+    position: relative;
+    display: inline-block;
+    background-color: #252525;
+    border: 2px solid #454545;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    height: 35px;
+    right: 3%;
+}
+
+.btn2:hover {
+    /* transform: translateY(-1px); */
+    background-color: #252525;
+    border: 2px solid #666;
 }
 
 td:nth-child(1) {
@@ -134,10 +151,12 @@ p {
     display: inline;
 }
 
-.navdiv{
+.navdiv {
     position: sticky;
     margin: auto;
+    overflow:visible;
 }
+
 nav {
     margin-top: 5px;
     margin-bottom: 20px;
@@ -160,16 +179,19 @@ ul {
     }
 
     li {
+        /* border: 2px solid transparent; */
         border: 2px solid transparent;
         border-radius: 5px;
         padding: 10px;
         transition: background 0.2s;
 
         a {
-            color: #2375D8;
-            text-decoration: none;
-            text-transform: uppercase;
+            /* color: red;
+            text-decoration: none; */
+            cursor: pointer;
+            position: relative;
             transition: color 0.2s;
+            width: 100%;
         }
 
         ul {
@@ -180,29 +202,26 @@ ul {
             margin: 12px -12px;
             padding: 0;
             background: #0373fc;
-            border: 2px solid #0d327a;
+            border: 2px solid transparent;
             border-radius: 5px;
             transition: opacity 0.2s, visibility 0.2s;
 
             li {
+                /* border: 2px solid #00A; */
                 margin: -2px 0 0 -2px;
                 width: calc(100% - 20px);
                 line-height: 1.7;
-                color: #FFFFFF;
+                color: white;
 
-                a {
+                /* a {
                     color: #2375D8;
-                }
+                } */
             }
         }
 
         &:hover {
             background: #0d327a;
             border: 2px solid #FFFFFF;
-
-            a {
-                color: #F9F8FD;
-            }
 
             ul {
                 visibility: visible;
