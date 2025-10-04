@@ -134,10 +134,10 @@ table.no-spacing {
 
 body {
     margin: 0;
-    /* background-color: #252525; */
-    background-color: rgba(37, 37, 37, 0.80);
+    background-color: #252525;
+    /* background-color: rgba(37, 37, 37, 0.80);
     background-image: url('noise.png');
-    background-blend-mode:overlay;
+    background-blend-mode:overlay; */
 }
 
 p {
