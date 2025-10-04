@@ -45,7 +45,7 @@
                 .catch(error => console.error('Error:', error));
         }
 
-        function addBacklog(name) {
+        function addBacklog() {
             let backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
 
             let html = '<table id="vocabList">';
