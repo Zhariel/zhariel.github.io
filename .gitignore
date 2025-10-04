@@ -15,6 +15,7 @@
 
 .idea/*
 .idea/
+*.txt
 
 JLPTTangoN3.txt
 test.html

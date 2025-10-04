@@ -23,7 +23,6 @@
     </div>
 
     <script>
-
         function renderNavbar() {
             let html = '';
             let counter = 1
@@ -46,9 +45,31 @@
                 .catch(error => console.error('Error:', error));
         }
 
-        function addBacklog() {
-            let backlog = JSON.parse(localStorage.getItem("hiddenRows_" + name) || "[]");
-            document.getElementById('data').innerHTML = backlog[0];
+        function addBacklog(name) {
+            let backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
+
+            let html = '<table id="vocabList">';
+            backlog.forEach((row, index) => {
+                html += '<tr>';
+                html += '<td>' + index + '</td>';
+                row.forEach(col => {
+                    html += '<td class="vocab-cell">' + col + '</td>';
+                });
+                html += '</tr>';
+            });
+            html += '</table>';
+
+            document.getElementById('data').innerHTML = html;
+
+            document.querySelectorAll("#vocabList tr").forEach((row, i) => {
+                row.onclick = e => {
+                    if (e.altKey) {
+                        backlog.splice(i, 1);
+                        localStorage.setItem("backlog_", JSON.stringify(backlog));
+                        addBacklog(); // Refresh
+                    }
+                };
+            });
         }
 
         function addWordList(name) {
@@ -70,18 +91,25 @@
                     document.getElementById('data').innerHTML = html;
 
                     const table = document.getElementById("vocabList");
-                    let clicked = JSON.parse(localStorage.getItem("hiddenRows_" + name) || "[]");
+                    let hidden = JSON.parse(localStorage.getItem("hiddenRows_" + name) || "[]");
+                    let backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
 
                     [...table.rows].forEach((row, i) => {
-                        if (i && clicked.includes(i)) collapse(row, i, name);
+                        if (i && hidden.includes(i)) collapse(row, i, name);
                         row.onclick = e => {
                             if (e.ctrlKey) {
                                 collapse(row, i, name);
-                                clicked.push(i);
-                                localStorage.setItem("hiddenRows_" + name, JSON.stringify(clicked));
+                                hidden.push(i);
+                                localStorage.setItem("hiddenRows_" + name, JSON.stringify(hidden));
                             }
-                            else if (e.shiftKey) {
-                                localStorage.setItem("backlog", JSON.stringify(clicked));
+                            else if (e.altKey) {
+                                const rowData = [...row.cells].slice(1).map(cell => cell.innerHTML);
+                                if (!backlog.some(r => JSON.stringify(r) === JSON.stringify(rowData))) {
+                                    rowData.splice(5, 1);
+                                    rowData.push(extractName(name));
+                                    backlog.push(rowData);
+                                    localStorage.setItem("backlog_", JSON.stringify(backlog));
+                                }
                             }
                         };
                     });
@@ -90,10 +118,14 @@
 
             document.addEventListener("click", (e) => {
                 if (e.target.classList.contains("vocab-cell")) {
-                    document.querySelectorAll(".vocab-cell").forEach(cell => cell.classList.remove("clicked"));
-                    e.target.classList.add("clicked");
+                    document.querySelectorAll(".vocab-cell").forEach(cell => cell.classList.remove("hidden"));
+                    e.target.classList.add("hidden");
                 }
             });
+        }
+
+        function extractName(str) {
+            return str.replace(/.*\/(.*?)\.csv$/, '$1');
         }
 
         function collapse(row, i, name) {
