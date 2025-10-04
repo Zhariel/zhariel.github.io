@@ -10,12 +10,11 @@
 
 <body>
     <div style="display: flex; flex-direction: column;">
-        <div style="display: flex; flex-direction: row;">
-            <nav>
-                <ul id="navbar">
-                </ul>
-            </nav>
-            <button id="unhideAll">Unhide All</button>
+        <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+            <div class="navdiv">
+                <nav><ul id="navbar"></ul></nav>
+                <button id="unhide" class="button-27">.</button>
+            </div>
         </div>
         <div id="data"></div>
     </div>
@@ -98,12 +97,10 @@
             row.replaceWith(placeholder);
         }
 
-
         addWordList('core/' + 1 + 'all.csv')
-
         renderNavbar();
 
-        document.getElementById("unhideAll").onclick = () => { Object.keys(localStorage).forEach(key => { if (key.startsWith("hiddenRows_")) localStorage.removeItem(key); }); location.reload(); };
+        document.getElementById("unhide").onclick = () => { Object.keys(localStorage).forEach(key => { if (key.startsWith("hiddenRows_")) localStorage.removeItem(key); }); location.reload(); };
     </script>
 </body>
 
