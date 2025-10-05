@@ -25,7 +25,8 @@
 
     <script>
         document.addEventListener('keydown', e => {
-            if (e.altKey) document.body.style.cursor = 'copy';
+            if (e.ctrlKey) document.body.style.cursor = 'copy';
+            if (e.altKey) document.body.style.cursor = 'cell';
         });
 
         document.addEventListener('keyup', e => {
@@ -35,7 +36,7 @@
         function createParticle(parentElement = document.body) {
             const particle = document.createElement("div");
             particle.classList.add("particle");
-            particle.innerHTML = "<h1>+</h1>";
+            particle.innerHTML = "<h1 style='font-size:3em'>+</h1>";
             if (parentElement) {
                 parentElement.append(particle);
             }
