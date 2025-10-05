@@ -19,7 +19,7 @@ th {
 .hiddenrow {
     cursor: pointer;
     border: none;
-    height: 0;
+    height: 0px;
     /* background-color: #222; */
 }
 
