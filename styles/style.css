@@ -84,6 +84,7 @@ td:nth-child(1) {
 
 td:nth-child(2) {
     /* font-weight: bold; */
+    min-width: 6em;
     width: 6em;
 }
 
@@ -230,6 +231,34 @@ ul {
     }
 }
 
+#particle-area {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.particle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  color: white;
+  animation: particle-animation .8s ease-out forwards;
+}
+
+@keyframes particle-animation {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -70%) scale(1);
+    opacity: 0;
+  }
+}
 input.switch_1 {
   appearance: none;
   width: 3.5em;
