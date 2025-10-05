@@ -20,9 +20,11 @@ th {
     cursor: pointer;
     border: none;
     height: 0;
+    /* background-color: #222; */
 }
 
 .hiddenbar {
+    display: none;
     width: 30%;
     margin: auto;
     margin-top: 1px;
