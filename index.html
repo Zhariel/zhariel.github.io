@@ -25,9 +25,7 @@
 
     <script>
         document.querySelector('.switch_1').addEventListener('change', e => {
-            document.querySelectorAll('.furigana').forEach(el => {
-                el.style.display = e.target.checked ? 'inline' : 'none';
-            });
+            document.body.classList.toggle('show-furigana', e.target.checked);
         });
 
         function renderNavbar() {
@@ -98,9 +96,7 @@
                     document.getElementById('data').innerHTML = html;
 
                     if (document.getElementById('switch').checked) {
-                        document.querySelectorAll('.furigana').forEach(el => {
-                            el.style.display = "inline";
-                        });
+                        document.body.classList.add('show-furigana');
                     }
 
                     const table = document.getElementById("vocabList");

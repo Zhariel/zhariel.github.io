@@ -144,13 +144,11 @@ p {
     color: #ddd;
 }
 
-.furigana {
-    display: none;
-}
+.furigana { display: none; }
 
-.vocab-cell:active .furigana {
-    display: inline;
-}
+.show-furigana .furigana { display: inline; }
+
+.vocab-cell:active .furigana { display: inline; }
 
 .navdiv {
     position: sticky;
