@@ -126,13 +126,11 @@
                         if (i && hidden.includes(i)) collapse(row, i, name);
                         row.onclick = e => {
                             if (e.ctrlKey) {
-                                console.log("c")
                                 collapse(row, i, name);
                                 hidden.push(i);
                                 localStorage.setItem("hiddenRows_" + name, JSON.stringify(hidden));
                             }
                             else if (e.shiftKey || e.shiftKey) {
-                                console.log("a")
                                 e.preventDefault();
                                 const rowData = [...row.cells].slice(1).map(cell => cell.innerHTML);
                                 rowData.splice(5, 1);
@@ -145,7 +143,6 @@
                                     p.style.top = e.pageY + 'px';
                                     setTimeout(() => p.remove(), 1000);
                                 }
-                                console.log("b")
 
                             }
 
