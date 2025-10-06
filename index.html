@@ -26,11 +26,11 @@
 
     <script>
         document.addEventListener('keydown', e => {
-            if (e.altKey) document.body.style.cursor = 'copy';
+            if (e.shiftKey) document.body.style.cursor = 'copy';
         });
 
         document.addEventListener('keyup', e => {
-            if (!e.altKey) document.body.style.cursor = '';
+            if (!e.shiftKey) document.body.style.cursor = '';
         });
 
         function createParticle(parentElement = document.body) {
@@ -87,7 +87,7 @@
 
             document.querySelectorAll("#vocabList tr").forEach((row, i) => {
                 row.onclick = e => {
-                    if (e.altKey) {
+                    if (e.shiftKey) {
                         backlog.splice(i, 1);
                         localStorage.setItem("backlog_", JSON.stringify(backlog));
                         addBacklog();
@@ -126,11 +126,14 @@
                         if (i && hidden.includes(i)) collapse(row, i, name);
                         row.onclick = e => {
                             if (e.ctrlKey) {
+                                console.log("c")
                                 collapse(row, i, name);
                                 hidden.push(i);
                                 localStorage.setItem("hiddenRows_" + name, JSON.stringify(hidden));
                             }
-                            else if (e.altKey) {
+                            else if (e.shiftKey || e.shiftKey) {
+                                console.log("a")
+                                e.preventDefault();
                                 const rowData = [...row.cells].slice(1).map(cell => cell.innerHTML);
                                 rowData.splice(5, 1);
                                 rowData.push(extractName(name));
@@ -142,6 +145,7 @@
                                     p.style.top = e.pageY + 'px';
                                     setTimeout(() => p.remove(), 1000);
                                 }
+                                console.log("b")
 
                             }
 
@@ -151,7 +155,7 @@
                 .catch(error => console.error('Error fetching CSV:', error));
 
             document.addEventListener("click", (e) => {
-                if (e.ctrlKey || e.altKey) return;
+                if (e.ctrlKey || e.shiftKey) return;
                 if (e.target.classList.contains("vocab-cell")) {
                     document.querySelectorAll(".vocab-cell").forEach(cell => cell.classList.remove("hidden"));
                     e.target.classList.add("hidden");
