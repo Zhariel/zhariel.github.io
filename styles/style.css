@@ -51,7 +51,7 @@ th {
     margin-top: 3px;
     height: 20px;
     width: 20px;
-    left: 3%;
+    left: 2%;
 }
 
 .btn:hover {
@@ -69,7 +69,8 @@ th {
     cursor: pointer;
     color: white;
     height: 35px;
-    right: 3%;
+    right: 2%;
+    margin-top: 3px;
 }
 
 .btn2:hover {
@@ -137,6 +138,7 @@ table.no-spacing {
 body {
     margin: 0;
     background-color: #252525;
+    padding-top: 70px;
     /* background-color: rgba(37, 37, 37, 0.80);
     background-image: url('noise.png');
     background-blend-mode:overlay; */
@@ -147,20 +149,36 @@ p {
     color: #ddd;
 }
 
-.furigana { display: none; }
+.furigana {
+    display: none;
+}
 
-.show-furigana .furigana { display: inline; }
+.show-furigana .furigana {
+    display: inline;
+}
 
-.vocab-cell:active .furigana { display: inline; }
+.vocab-cell:active .furigana {
+    display: inline;
+}
 
 .navdiv {
-    position: sticky;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
     margin: auto;
-    overflow: visible;
+    transform: translateY(-100%);
+    transition: transform 0.2s ease;
+    z-index: 1000;
+    background-color: #252525;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 nav {
-    margin-top: 5px;
+    margin-top: 25px;
     margin-bottom: 20px;
     display: inline-block;
     border: 1px solid #EBECF1;
@@ -234,64 +252,66 @@ ul {
 }
 
 #particle-area {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  display: flex;
-  flex-direction: column-reverse;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .particle {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  color: lightseagreen;
-  animation: particle-animation 1.2s ease-out forwards;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    color: lightseagreen;
+    animation: particle-animation 1.2s ease-out forwards;
 }
 
 @keyframes particle-animation {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -65%) scale(1);
-    opacity: 0;
-  }
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -65%) scale(1);
+        opacity: 0;
+    }
 }
+
 input.switch_1 {
-  appearance: none;
-  width: 3.5em;
-  height: 1.5em;
-  background: #888;
-  border-radius: 3em;
-  position: relative;
-  top: 5px;
-  left: 6%;
-  cursor: pointer;
-  outline: none;
-  transition: all .1s ease-in-out;
+    appearance: none;
+    width: 3.5em;
+    height: 1.5em;
+    background: #888;
+    border-radius: 3em;
+    position: relative;
+    top: 3px;
+    left: 4%;
+    cursor: pointer;
+    outline: none;
+    transition: all .1s ease-in-out;
 }
 
 input.switch_1:checked {
-  background: #456ffa;
+    background: #456ffa;
 }
 
 input.switch_1:after {
-  content: "";
-  position: absolute;
-  width: 1.5em;
-  height: 1.5em;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 .25em rgba(0,0,0,.3);
-  transform: scale(.7);
-  left: 0;
-  transition: all .15s ease-in-out;
+    content: "";
+    position: absolute;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 .25em rgba(0, 0, 0, .3);
+    transform: scale(.7);
+    left: 0;
+    transition: all .15s ease-in-out;
 }
 
 input.switch_1:checked:after {
-  left: calc(100% - 1.5em);
+    left: calc(100% - 1.5em);
 }

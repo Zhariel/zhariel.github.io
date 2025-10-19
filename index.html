@@ -25,6 +25,19 @@
     </div>
 
     <script>
+        let lastScroll = window.scrollY;
+        const nav = document.querySelector('.navdiv');
+
+        window.addEventListener('scroll', () => {
+            const current = window.scrollY;
+            if (current < lastScroll) {
+                nav.style.transform = 'translateY(0)';
+            } else {
+                nav.style.transform = 'translateY(-100%)';
+            }
+            lastScroll = current;
+        });
+
         document.addEventListener('keydown', e => {
             if (e.altKey) document.body.style.cursor = 'copy';
         });
