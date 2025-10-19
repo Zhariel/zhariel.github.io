@@ -27,15 +27,22 @@
     <script>
         let lastScroll = window.scrollY;
         const nav = document.querySelector('.navdiv');
+        document.querySelector('.navdiv').style.transform = 'translateY(0)';
 
         window.addEventListener('scroll', () => {
             const current = window.scrollY;
-            if (current < lastScroll) {
-                nav.style.transform = 'translateY(0)';
-            } else {
-                nav.style.transform = 'translateY(-100%)';
+            if (current !== lastScroll) {
+                if (current < lastScroll) {
+                    nav.style.transform = 'translateY(0)';
+                    nav.classList.add("upscroll");
+                } else {
+                    nav.style.transform = 'translateY(-100%)';
+                }
+                lastScroll = current;
             }
-            lastScroll = current;
+            if (window.scrollY === 0) {
+                nav.classList.remove('upscroll');
+            }
         });
 
         document.addEventListener('keydown', e => {
