@@ -70,7 +70,6 @@ th {
     color: white;
     height: 35px;
     right: 2%;
-    margin-top: 3px;
 }
 
 .btn2:hover {
@@ -182,11 +181,11 @@ p {
 .upscroll{
     border-left: 2px solid #333;
     border-right: 2px solid #333;
-    border-radius: 5px;
+    border-radius: 3px;
 }
 
 nav {
-    margin-top: 25px;
+    margin-top: 18px;
     margin-bottom: 20px;
     display: inline-block;
     border: 1px solid #EBECF1;
