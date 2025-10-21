@@ -42,7 +42,7 @@
             const blob = new Blob([csv], { type: "text/csv" });
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
-            a.download = "backlog.csv";
+            a.download = "backlog_" + new Date().toLocaleDateString('ja-JP') + ".csv";
             a.click();
         }
 
