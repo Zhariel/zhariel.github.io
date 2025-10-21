@@ -11,8 +11,16 @@
 
 <body>
     <div style="display: flex; flex-direction: column;">
-        <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+        <div class="backlogoptions">
             <div class="navdiv">
+                <div class="btn3">
+                    <button class="updbutton" id="menuBtn">⇅</button>
+                    <div id="menu" class="backlogoptions" style="display:none">
+                        <input type="file" id="uploadBacklog" accept=".csv" style="display:none" onchange="uploadBacklog(event)">
+                        <button class="backlogbutton" onclick="document.getElementById('uploadBacklog').click()">Import</button>
+                        <button class="backlogbutton" onclick="downloadBacklog()">Export</button>
+                    </div>
+                </div>
                 <button class="btn2" onClick="addBacklog()">Backlog</button>
                 <nav>
                     <ul id="navbar"></ul>
@@ -25,6 +33,41 @@
     </div>
 
     <script>
+
+        function downloadBacklog() {
+            const data = JSON.parse(localStorage.getItem("backlog_") || "[]");
+            const csv = data.map(r => r.join(",")).join("\n");
+            const blob = new Blob([csv], { type: "text/csv" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "backlog.csv";
+            a.click();
+        }
+
+        function uploadBacklog(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            file.text().then(text => {
+                const rows = text.split("\n").map(r => r.split(","));
+                localStorage.setItem("backlog_", JSON.stringify(rows));
+                alert("Uploaded backlog.")
+                document.getElementById('menu').style.display = 'none';
+                addBacklog();
+            });
+        }
+
+        document.getElementById("menuBtn").onclick = () => {
+            const m = document.getElementById("menu");
+            m.style.display = m.style.display === "none" ? "block" : "none";
+        };
+
+        document.addEventListener('click', e => {
+            const menu = document.getElementById('menu');
+            if (menu.style.display === 'block' && !menu.contains(e.target) && e.target.id !== 'menuBtn') {
+                menu.style.display = 'none';
+            }
+        });
+
         let lastScroll = window.scrollY;
         const nav = document.querySelector('.navdiv');
         document.querySelector('.navdiv').style.transform = 'translateY(0)';
@@ -37,6 +80,7 @@
                     nav.classList.add("upscroll");
                 } else {
                     nav.style.transform = 'translateY(-100%)';
+                    document.getElementById('menu').style.display = 'none';
                 }
                 lastScroll = current;
             }

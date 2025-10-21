@@ -73,8 +73,50 @@ th {
 }
 
 .btn2:hover {
-    /* transform: translateY(-1px); */
     background-color: #252525;
+    border: 2px solid #666;
+}
+
+.btn3{
+    position: relative;
+    display: inline-block;
+    right: 3%;
+}
+
+.updbutton{
+    position: relative;
+    display: inline-block;
+    height: 35px;
+    background-color: #252525;
+    color: white;
+    border: none;
+    border: 2px solid #454545;
+    border-radius: 4px;
+}
+
+.updbutton:hover {
+    background-color: #252525;
+    border: 2px solid #666;
+}
+
+.backlogoptions {
+    position:absolute; 
+    background-color: #252525;
+    top:100%; 
+    left:0; 
+    background:white; 
+    border:2px solid #666;
+}
+
+.backlogbutton {
+    background-color: #252525;
+    color: white;
+    border: 2px solid #252525;
+    width: 100%;
+    text-align: left;
+}
+
+.backlogbutton:hover {
     border: 2px solid #666;
 }
 
