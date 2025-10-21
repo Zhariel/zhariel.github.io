@@ -16,8 +16,10 @@
                 <div class="btn3">
                     <button class="updbutton" id="menuBtn">⇅</button>
                     <div id="menu" class="backlogoptions" style="display:none">
-                        <input type="file" id="uploadBacklog" accept=".csv" style="display:none" onchange="uploadBacklog(event)">
-                        <button class="backlogbutton" onclick="document.getElementById('uploadBacklog').click()">Import</button>
+                        <input type="file" id="uploadBacklog" accept=".csv" style="display:none"
+                            onchange="uploadBacklog(event)">
+                        <button class="backlogbutton"
+                            onclick="document.getElementById('uploadBacklog').click()">Import</button>
                         <button class="backlogbutton" onclick="downloadBacklog()">Export</button>
                     </div>
                 </div>
@@ -36,7 +38,7 @@
 
         function downloadBacklog() {
             const data = JSON.parse(localStorage.getItem("backlog_") || "[]");
-            const csv = data.map(r => r.join(",")).join("\n");
+            const csv = data.map(r => r.map(c => ("" + c).replace(/\r?\n/g, " ")).join(",")).join("\n");
             const blob = new Blob([csv], { type: "text/csv" });
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
