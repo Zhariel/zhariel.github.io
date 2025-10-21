@@ -332,13 +332,13 @@ ul {
 
 input.switch_1 {
     appearance: none;
-    width: 3.5em;
-    height: 1.5em;
+    width: 2.8em;
+    height: 1.2em;
     background: #888;
-    border-radius: 3em;
+    border-radius: 2.5em;
     position: relative;
-    top: 3px;
-    left: 4%;
+    top: 0px;
+    left: 1%;
     cursor: pointer;
     outline: none;
     transition: all .1s ease-in-out;
@@ -351,8 +351,8 @@ input.switch_1:checked {
 input.switch_1:after {
     content: "";
     position: absolute;
-    width: 1.5em;
-    height: 1.5em;
+    width: 1.2em;
+    height: 1.2em;
     border-radius: 50%;
     background: #fff;
     box-shadow: 0 0 .25em rgba(0, 0, 0, .3);
@@ -362,5 +362,5 @@ input.switch_1:after {
 }
 
 input.switch_1:checked:after {
-    left: calc(100% - 1.5em);
+    left: calc(100% - 1.2em);
 }

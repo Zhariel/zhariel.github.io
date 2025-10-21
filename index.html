@@ -27,8 +27,10 @@
                 <nav>
                     <ul id="navbar"></ul>
                 </nav>
-                <button id="unhide" class="btn">.</button>
+                <button id="unhide" class="btn" style="display:none">.</button>
                 <input type="checkbox" class="switch_1" id="switch">
+                <input type="checkbox" class="switch_1" id="toggleCol3Slider">
+                <!-- <button id="toggleCol3" class="btn">Toggle 3rd Column</button> -->
             </div>
         </div>
         <div id="data"></div>
@@ -150,6 +152,7 @@
             html += '</table>';
 
             document.getElementById('data').innerHTML = html;
+            resetCol3Slider();
 
             document.querySelectorAll("#vocabList tr").forEach((row, i) => {
                 row.onclick = e => {
@@ -179,6 +182,7 @@
                     });
                     html += '</table>';
                     document.getElementById('data').innerHTML = html;
+                    resetCol3Slider();
 
                     if (document.getElementById('switch').checked) {
                         document.body.classList.add('show-furigana');
@@ -242,10 +246,30 @@
             row.replaceWith(placeholder);
         }
 
+        document.getElementById("unhide").onclick = () => { Object.keys(localStorage).forEach(key => { if (key.startsWith("hiddenRows_")) localStorage.removeItem(key); }); location.reload(); };
+
+        let col3Hidden = false;
+
+        document.getElementById("toggleCol3Slider").addEventListener("change", (e) => {
+            const table = document.getElementById("vocabList");
+            if (!table) return;
+
+            [...table.rows].forEach(row => {
+                if (row.cells.length > 2) row.cells[2].style.display = e.target.checked ? "none" : "";
+                if (row.cells.length > 3) row.cells[3].style.display = e.target.checked ? "none" : "";
+                if (row.cells.length > 6) row.cells[6].style.display = e.target.checked ? "none" : "";
+            });
+        });
+
+        function resetCol3Slider() {
+            const slider = document.getElementById("toggleCol3Slider");
+            slider.checked = false;
+            updateCol3Visibility();
+        }
+
         addWordList('core/' + 1 + 'all.csv')
         renderNavbar();
 
-        document.getElementById("unhide").onclick = () => { Object.keys(localStorage).forEach(key => { if (key.startsWith("hiddenRows_")) localStorage.removeItem(key); }); location.reload(); };
     </script>
 </body>
 
