@@ -13,8 +13,9 @@
     <div style="display: flex; flex-direction: column;">
         <div class="backlogoptions">
             <div class="navdiv">
+                <button class="btn" onClick="randomizeCSV()">⚅</button>
                 <div class="btn3">
-                    <button class="updbutton" id="menuBtn">⇅</button>
+                    <button class="updbutton" id="menuBtn" style="height:25px;width:25px;">⇅</button>
                     <div id="menu" class="backlogoptions" style="display:none">
                         <input type="file" id="uploadBacklog" accept=".csv" style="display:none"
                             onchange="uploadBacklog(event)">
@@ -30,13 +31,14 @@
                 <button id="unhide" class="btn" style="display:none">.</button>
                 <input type="checkbox" class="switch_1" id="switch">
                 <input type="checkbox" class="switch_1" id="toggleCol3Slider">
-                <!-- <button id="toggleCol3" class="btn">Toggle 3rd Column</button> -->
             </div>
         </div>
         <div id="data"></div>
     </div>
 
     <script>
+        let isBacklog = false;
+        let current = 'core/' + 1 + 'all.csv';
 
         function downloadBacklog() {
             const data = JSON.parse(localStorage.getItem("backlog_") || "[]");
@@ -137,16 +139,32 @@
                 .catch(error => console.error('Error:', error));
         }
 
-        function addBacklog() {
+        function addBacklog(randomize) {
+            isBacklog = true;
             let backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
+            backlog.sort((b, a) => (a[a.length - 1] || "").localeCompare(b[b.length - 1] || ""));
+
+            if (randomize) {
+                const grouped = {};
+                backlog.forEach(r => {
+                    const g = r[r.length - 1];
+                    (grouped[g] ||= []).push(r);
+                });
+                backlog = Object.keys(grouped).flatMap(k =>
+                    grouped[k].sort(() => Math.random() - 0.5)
+                );
+            }
 
             let html = '<table id="vocabList">';
+            let prev = null;
             backlog.forEach((row, index) => {
-                html += '<tr>';
-                html += '<td>' + index + '</td>';
-                row.forEach(col => {
-                    html += '<td class="vocab-cell">' + col + '</td>';
-                });
+                const group = row[row.length - 1];
+                if (group !== prev && prev !== null)
+                    html += `<tr style="background:#444"><td colspan="${row.length + 1}"></td></tr>`;
+                prev = group;
+
+                html += '<tr><td>' + index + '</td>';
+                row.forEach(col => html += '<td class="vocab-cell">' + col + '</td>');
                 html += '</tr>';
             });
             html += '</table>';
@@ -165,20 +183,24 @@
             });
         }
 
-        function addWordList(name) {
+        function addWordList(name, randomize) {
+            isBacklog = false;
+            current = name;
             fetch('vocab/' + name)
                 .then(response => response.text())
                 .then(csvText => {
+                    console.log(csvText)
+                    let rows = csvText.split('\n');
+                    if (randomize) rows = rows.sort(() => Math.random() - 0.5);
+
                     let html = '<table id="vocabList">';
-                    let i = 0;
-                    csvText.split('\n').forEach(row => {
+                    rows.forEach((row, i) => {
                         html += '<tr><td>' + i + '</td>';
                         row.split(',').forEach(column => {
                             column = column.replace(/<rt>(.*?)<\/rt>/g, '<rt><span class="furigana">$1</span></rt>');
                             html += '<td class="vocab-cell">' + column + '</td>';
                         });
                         html += '</tr>';
-                        i++;
                     });
                     html += '</table>';
                     document.getElementById('data').innerHTML = html;
@@ -264,10 +286,19 @@
         function resetCol3Slider() {
             const slider = document.getElementById("toggleCol3Slider");
             slider.checked = false;
-            updateCol3Visibility();
         }
 
-        addWordList('core/' + 1 + 'all.csv')
+        function randomizeCSV() {
+            if (isBacklog) {
+                addBacklog(true)
+            }
+            else {
+                addWordList(current, true)
+            }
+        }
+
+        addWordList(current)
+        let lastCSV = current;
         renderNavbar();
 
     </script>
