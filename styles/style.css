@@ -106,6 +106,8 @@ th {
     left:0; 
     background:white; 
     border:2px solid #666;
+    border-radius: 4px;
+    z-index: 10;
 }
 
 .backlogbutton {
