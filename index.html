@@ -215,7 +215,7 @@
                     let backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
 
                     [...table.rows].forEach((row, i) => {
-                        if (i && hidden.includes(i)) collapse(row, i, name);
+                        if (i && hidden.includes(i) && !randomize) collapse(row, i, name);
                         row.onclick = e => {
                             if (e.ctrlKey) {
                                 collapse(row, i, name);
@@ -237,7 +237,6 @@
                                 }
 
                             }
-
                         };
                     });
                 })
