@@ -5,6 +5,44 @@ table {
     color: #ddd;
 }
 
+.context-menu {
+    position: absolute;
+    background: #222;
+    border: 1px solid #555;
+    color: white;
+    display: none;
+    z-index: 1000;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.context-menu.visible {
+    display: block;
+}
+
+.context-menu .menu-item {
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.row-teal {
+    box-shadow: inset 5px 0px 0px rgba(0,255,255,0.3);
+    background-color: rgba(0,255,255,0.1);
+}
+
+.row-blue {
+    box-shadow: inset 5px 0px 0px rgba(0,70,255,0.8);
+    background-color: rgba(0,70,255,0.25);
+}
+
+.row-teal:hover {
+    background-color: rgba(0,255,255,0.16);
+}
+
+.row-blue:hover {
+    background-color: rgba(0,70,255,0.42);
+}
+
 td,
 th {
     border: 2px solid #333;
@@ -76,13 +114,13 @@ th {
     border: 2px solid #666;
 }
 
-.btn3{
+.btn3 {
     position: relative;
     display: inline-block;
     right: 3%;
 }
 
-.updbutton{
+.updbutton {
     position: relative;
     display: inline-block;
     height: 35px;
@@ -100,12 +138,12 @@ th {
 }
 
 .backlogoptions {
-    position:absolute; 
+    position: absolute;
     background-color: #252525;
-    top:100%; 
-    left:0; 
-    background:white; 
-    border:2px solid #666;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 2px solid #666;
     border-radius: 4px;
     z-index: 10;
 }
@@ -221,7 +259,7 @@ p {
     align-items: center;
 }
 
-.upscroll{
+.upscroll {
     border-left: 2px solid #454545;
     border-right: 2px solid #454545;
     border-bottom: 2px solid #454545;

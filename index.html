@@ -29,6 +29,8 @@
                     <ul id="navbar"></ul>
                 </nav>
                 <button id="unhide" class="btn" style="display:none">.</button>
+                <!-- <div>show furigana<input type="checkbox" class="switch_1" id="switch"></div>
+                <div>hide hints<input type="checkbox" class="switch_1" id="toggleCol3Slider"></div> -->
                 <input type="checkbox" class="switch_1" id="switch">
                 <input type="checkbox" class="switch_1" id="toggleCol3Slider">
             </div>
@@ -41,8 +43,8 @@
         let current = 'core/' + 1 + 'all.csv';
 
         function downloadBacklog() {
-            const data = JSON.parse(localStorage.getItem("backlog_") || "[]");
-            const csv = data.map(r => r.map(c => ("" + c).replace(/\r?\n/g, " ")).join(",")).join("\n");
+            const backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
+            const csv = backlog.map(r => (r.cells || r).map(c => ("" + c).replace(/\r?\n/g, " ")).join(",")).join("\n");
             const blob = new Blob([csv], { type: "text/csv" });
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
@@ -54,9 +56,12 @@
             const file = e.target.files[0];
             if (!file) return;
             file.text().then(text => {
-                const rows = text.split("\n").map(r => r.split(","));
+                const rows = text.split("\n").map(r => ({
+                    cells: r.split(","),
+                    color: null
+                }));
                 localStorage.setItem("backlog_", JSON.stringify(rows));
-                alert("Uploaded backlog.")
+                alert("Uploaded backlog.");
                 document.getElementById('menu').style.display = 'none';
                 addBacklog();
             });
@@ -139,46 +144,79 @@
                 .catch(error => console.error('Error:', error));
         }
 
-        function addBacklog(randomize) {
+        let menu = document.getElementById("contextMenu");
+        if (!menu) {
+            menu = document.createElement("div");
+            menu.id = "contextMenu";
+            menu.className = "context-menu";
+            document.body.appendChild(menu);
+            document.addEventListener("click", () => menu.classList.remove("visible"));
+        }
+
+        function addBacklog(randomize = false) {
             isBacklog = true;
             let backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
-            backlog.sort((b, a) => (a[a.length - 1] || "").localeCompare(b[b.length - 1] || ""));
+            backlog.sort((a, b) => (b.cells.at(-1) || "").localeCompare(a.cells.at(-1) || ""));
 
             if (randomize) {
                 const grouped = {};
-                backlog.forEach(r => {
-                    const g = r[r.length - 1];
-                    (grouped[g] ||= []).push(r);
-                });
-                backlog = Object.keys(grouped).flatMap(k =>
-                    grouped[k].sort(() => Math.random() - 0.5)
-                );
+                backlog.forEach(r => (grouped[r.cells.at(-1)] ||= []).push(r));
+                backlog = Object.values(grouped).flatMap(g => g.sort(() => Math.random() - 0.5));
             }
 
             let html = '<table id="vocabList">';
             let prev = null;
-            backlog.forEach((row, index) => {
-                const group = row[row.length - 1];
-                if (group !== prev && prev !== null)
-                    html += `<tr style="background:#444"><td colspan="${row.length + 1}"></td></tr>`;
+            backlog.forEach((row, idx) => {
+                const group = row.cells.at(-1);
+                if (group !== prev && prev !== null) html += `<tr style="background:#444"><td colspan="${row.cells.length + 1}"></td></tr>`;
                 prev = group;
 
-                html += '<tr><td>' + index + '</td>';
-                row.forEach(col => html += '<td class="vocab-cell">' + col + '</td>');
-                html += '</tr>';
+                html += `<tr data-index="${idx}" ${row.color ? `data-color="${row.color}" class="row-${row.color}"` : ""}>
+            <td>${idx}</td>${row.cells.map(c => `<td class="vocab-cell">${c}</td>`).join('')}</tr>`;
             });
             html += '</table>';
-
             document.getElementById('data').innerHTML = html;
             resetCol3Slider();
 
-            document.querySelectorAll("#vocabList tr").forEach((row, i) => {
+            document.querySelectorAll("#vocabList tr").forEach(row => {
                 row.onclick = e => {
                     if (e.altKey) {
-                        backlog.splice(i, 1);
+                        backlog.splice(row.dataset.index, 1);
                         localStorage.setItem("backlog_", JSON.stringify(backlog));
-                        addBacklog();
+                        addBacklog(randomize);
                     }
+                };
+
+                row.oncontextmenu = e => {
+                    e.preventDefault();
+                    const color = row.dataset.color || "";
+                    menu.innerHTML = color
+                        ? `<div class="menu-item" data-action="clear">Clear</div>`
+                        : `<div class="menu-item" data-color="teal">Teal</div>
+                   <div class="menu-item" data-color="blue">Blue</div>`;
+                    menu.style.left = e.pageX + "px";
+                    menu.style.top = e.pageY + "px";
+                    menu.classList.add("visible");
+
+                    menu.querySelectorAll(".menu-item").forEach(item => {
+                        item.onclick = () => {
+                            const idx = row.dataset.index;
+                            row.classList.remove("row-teal", "row-blue");
+                            delete row.dataset.color;
+
+                            if (item.dataset.color) {
+                                const cls = `row-${item.dataset.color}`;
+                                row.classList.add(cls);
+                                row.dataset.color = item.dataset.color;
+                                backlog[idx].color = item.dataset.color;
+                            } else {
+                                backlog[idx].color = null;
+                            }
+
+                            localStorage.setItem("backlog_", JSON.stringify(backlog));
+                            menu.classList.remove("visible");
+                        };
+                    });
                 };
             });
         }
@@ -189,7 +227,6 @@
             fetch('vocab/' + name)
                 .then(response => response.text())
                 .then(csvText => {
-                    console.log(csvText)
                     let rows = csvText.split('\n');
                     if (randomize) rows = rows.sort(() => Math.random() - 0.5);
 
@@ -222,20 +259,24 @@
                                 hidden.push(i);
                                 localStorage.setItem("hiddenRows_" + name, JSON.stringify(hidden));
                             }
-                            else if (e.altKey || e.altKey) {
+                            else if (e.altKey) {
                                 e.preventDefault();
                                 const rowData = [...row.cells].slice(1).map(cell => cell.innerHTML);
                                 rowData.splice(5, 1);
                                 rowData.push(extractName(name));
-                                if (!backlog.some(r => r.join() === rowData.join())) {
-                                    backlog.push(rowData);
+
+                                // Wrap as an object with color property
+                                const rowObj = { cells: rowData, color: null };
+
+                                if (!backlog.some(r => r.cells?.join() === rowObj.cells.join() || r.join?.() === rowObj.cells.join())) {
+                                    backlog.push(rowObj);
                                     localStorage.setItem("backlog_", JSON.stringify(backlog));
+
                                     const p = createParticle(row);
                                     p.style.left = e.pageX + 'px';
                                     p.style.top = e.pageY + 'px';
                                     setTimeout(() => p.remove(), 1000);
                                 }
-
                             }
                         };
                     });
