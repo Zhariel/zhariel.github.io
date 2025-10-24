@@ -172,8 +172,7 @@
                 prev = group;
 
                 html += `<tr data-index="${idx}" ${row.color ? `data-color="${row.color}" class="row-${row.color}"` : ""}>
-            <td>${idx}</td>${row.cells.map(c => `<td class="vocab-cell">${c}</td>`).join('')}</tr>`;
-            });
+            <td>${idx}</td>${row.cells.map(c => `<td class="vocab-cell">${c}</td>`).join('')}</tr>`;});
             html += '</table>';
             document.getElementById('data').innerHTML = html;
             resetCol3Slider();
@@ -187,37 +186,40 @@
                     }
                 };
 
-                row.oncontextmenu = e => {
-                    e.preventDefault();
-                    const color = row.dataset.color || "";
-                    menu.innerHTML = color
-                        ? `<div class="menu-item" data-action="clear">Clear</div>`
-                        : `<div class="menu-item" data-color="teal">Teal</div>
-                   <div class="menu-item" data-color="blue">Blue</div>`;
-                    menu.style.left = e.pageX + "px";
-                    menu.style.top = e.pageY + "px";
-                    menu.classList.add("visible");
+                const isMobile = /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent);
+                if (!isMobile) {
+                    row.oncontextmenu = e => {
+                        e.preventDefault();
+                        const color = row.dataset.color || "";
+                        menu.innerHTML = color
+                            ? `<div class="menu-item" data-action="clear">Clear</div>`
+                            : `<div class="menu-item" data-color="blue">Blue</div>
+                   <div class="menu-item" data-color="teal">Teal</div>`;
+                        menu.style.left = e.pageX + "px";
+                        menu.style.top = e.pageY + "px";
+                        menu.classList.add("visible");
 
-                    menu.querySelectorAll(".menu-item").forEach(item => {
-                        item.onclick = () => {
-                            const idx = row.dataset.index;
-                            row.classList.remove("row-teal", "row-blue");
-                            delete row.dataset.color;
+                        menu.querySelectorAll(".menu-item").forEach(item => {
+                            item.onclick = () => {
+                                const idx = row.dataset.index;
+                                row.classList.remove("row-teal", "row-blue");
+                                delete row.dataset.color;
 
-                            if (item.dataset.color) {
-                                const cls = `row-${item.dataset.color}`;
-                                row.classList.add(cls);
-                                row.dataset.color = item.dataset.color;
-                                backlog[idx].color = item.dataset.color;
-                            } else {
-                                backlog[idx].color = null;
-                            }
+                                if (item.dataset.color) {
+                                    const cls = `row-${item.dataset.color}`;
+                                    row.classList.add(cls);
+                                    row.dataset.color = item.dataset.color;
+                                    backlog[idx].color = item.dataset.color;
+                                } else {
+                                    backlog[idx].color = null;
+                                }
 
-                            localStorage.setItem("backlog_", JSON.stringify(backlog));
-                            menu.classList.remove("visible");
-                        };
-                    });
-                };
+                                localStorage.setItem("backlog_", JSON.stringify(backlog));
+                                menu.classList.remove("visible");
+                            };
+                        });
+                    };
+                }
             });
         }
 
