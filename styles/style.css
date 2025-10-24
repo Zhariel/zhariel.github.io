@@ -27,20 +27,20 @@ table {
 
 .row-teal {
     box-shadow: inset 5px 0px 0px rgba(0,255,255,0.3);
-    background-color: rgba(0,255,255,0.1);
+    background-color: rgba(0,255,255,0.07);
 }
 
 .row-blue {
     box-shadow: inset 5px 0px 0px rgba(0,70,255,0.8);
-    background-color: rgba(0,70,255,0.25);
+    background-color: rgba(0,70,255,0.18);
 }
 
 .row-teal:hover {
-    background-color: rgba(0,255,255,0.16);
+    background-color: rgba(0,255,255,0.1);
 }
 
 .row-blue:hover {
-    background-color: rgba(0,70,255,0.42);
+    background-color: rgba(0,70,255,0.3);
 }
 
 td,
