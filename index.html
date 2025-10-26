@@ -347,19 +347,16 @@
             const rows = [...t.rows];
             const order = { blue: 1, teal: 2, "": 3 };
 
-            // Group by last column (category)
             const groups = {};
             rows.forEach(r => {
                 const cat = r.cells[r.cells.length - 1]?.textContent.trim() || "";
                 (groups[cat] ||= []).push(r);
             });
 
-            // Sort rows within each category by color order
             Object.values(groups).forEach(g => g.sort((a, b) =>
                 (order[a.dataset.color || ""] - order[b.dataset.color || ""])
             ));
 
-            // Flatten while preserving category order
             t.replaceChildren(...Object.values(groups).flat());
         }
 
