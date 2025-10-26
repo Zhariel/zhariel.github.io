@@ -25,6 +25,7 @@
                     </div>
                 </div>
                 <button class="btn2" onClick="addBacklog()">Backlog</button>
+                <button class="btn2" onClick="sortColoredRows()">Sort Colors</button>
                 <nav>
                     <ul id="navbar"></ul>
                 </nav>
@@ -172,7 +173,8 @@
                 prev = group;
 
                 html += `<tr data-index="${idx}" ${row.color ? `data-color="${row.color}" class="row-${row.color}"` : ""}>
-            <td>${idx}</td>${row.cells.map(c => `<td class="vocab-cell">${c}</td>`).join('')}</tr>`;});
+            <td>${idx}</td>${row.cells.map(c => `<td class="vocab-cell">${c}</td>`).join('')}</tr>`;
+            });
             html += '</table>';
             document.getElementById('data').innerHTML = html;
             resetCol3Slider();
@@ -337,6 +339,28 @@
             else {
                 addWordList(current, true)
             }
+        }
+
+        function sortColoredRows() {
+            const t = document.getElementById("vocabList");
+            if (!t) return;
+            const rows = [...t.rows];
+            const order = { blue: 1, teal: 2, "": 3 };
+
+            // Group by last column (category)
+            const groups = {};
+            rows.forEach(r => {
+                const cat = r.cells[r.cells.length - 1]?.textContent.trim() || "";
+                (groups[cat] ||= []).push(r);
+            });
+
+            // Sort rows within each category by color order
+            Object.values(groups).forEach(g => g.sort((a, b) =>
+                (order[a.dataset.color || ""] - order[b.dataset.color || ""])
+            ));
+
+            // Flatten while preserving category order
+            t.replaceChildren(...Object.values(groups).flat());
         }
 
         addWordList(current)
