@@ -190,9 +190,8 @@
 管理	管理[かんり]	かんり	n,vs	control; management (e.g. of a business)								
 綿	綿[めん]	めん	n	cotton								
 緊張	緊張[きんちょう]	きんちょう	n,vs	nervousness; stress								
-縁	縁[ふち]	ふち	n	edge; rim								
-肌	肌[はだ]	はだ	"n
-n,n-suf"	skin								
+縁	縁[ふち]	ふち	n	edge; rim
+肌	肌[はだ]	はだ	n	skin
 胃	胃[い]	い	n	stomach								
 腰	腰[こし]	こし	n	lower back								
 自然	自然	しぜん	adj-na,n	natural; nature								
@@ -259,9 +258,7 @@ n,n-suf"	skin
 スター	スター	スター	n	star (celestial); celebrity; idol								
 セット	セット	セット	n,vs	set; set meal								
 ソファー	ソファー	ソファー	n	sofa								
-チャンス	チャンス	チャンス	n	chance								
-チーズ	チーズ	チーズ	"n
-int"	cheese								
+チャンス	チャンス	チャンス	n	chance
 デート	デート	デート	n,adj-no,vs	date								
 トップ	トップ	トップ	n	top								
 ドラマ	ドラマ	ドラマ	n	(TV) drama								
@@ -1010,9 +1007,8 @@ int"	cheese
 粉	粉	こな	n	flour; powder								
 粗末	粗末[そまつ]	そまつ	adj-na,n	crude; rough; shabby								
 せいぜい	せいぜい	せいぜい	adv	at the most; at best								
-精神	精神	せいしん	n	mind; soul; heart; spirit								
-約～	約～	やく～	"adv
-n"	approximately ～; about ～								
+精神	精神	せいしん	n	mind; soul; heart; spirit
+約～	約～	やく～	advn	approximately ～; about ～;
 納得	納得[なっとく]	なっとく	n,vs	consent; agreement								
 紐	紐[ひも]	ひも	n	string; cord								
 級	級	きゅう	n,n-suf,ctr	class; grade; rank								

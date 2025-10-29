@@ -15,7 +15,8 @@
 
 .idea/*
 .idea/
-*.txt
+.vocab/jlpt/*.txt
 
-JLPTTangoN3.txt
 test.html
+*.py
+*.txt
