@@ -187,7 +187,7 @@
                         addBacklog(randomize);
                     }
                 };
-                addHideEventListener(row);
+                // addHideEventListener(row);
 
                 const isMobile = /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent);
                 if (!isMobile) {
@@ -285,7 +285,7 @@
                             }
                         };
 
-                        addHideEventListener(row);
+                        // addHideEventListener(row);
                     });
                 })
                 .catch(error => console.error('Error fetching CSV:', error));
