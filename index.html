@@ -187,6 +187,7 @@
                         addBacklog(randomize);
                     }
                 };
+                addHideEventListener(row);
 
                 const isMobile = /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent);
                 if (!isMobile) {
@@ -283,6 +284,8 @@
                                 }
                             }
                         };
+
+                        addHideEventListener(row);
                     });
                 })
                 .catch(error => console.error('Error fetching CSV:', error));
@@ -294,6 +297,35 @@
                     e.target.classList.add("hidden");
                 }
             });
+        }
+
+        function addHideEventListener(row) {
+            row.onpointerdown = (e) => {
+                if (e.button !== 0) return;
+                if (!document.getElementById("toggleCol3Slider").checked) return;
+
+                [2, 3].forEach(i => {
+                    if (row.cells[i]) row.cells[i].style.display = "table-cell";
+                });
+
+                [4, 5].forEach(i => {
+                    if (row.cells[i]) row.cells[i].style.display = "none";
+                });
+
+                const slider = document.getElementById("toggleCol3Slider");
+
+                const onPointerUp = () => {
+                    if (slider.checked) {
+                        [4, 5].forEach(i => {
+                            if (row.cells[i]) row.cells[i].style.display = "table-cell";
+                        });
+                    }
+                    slider.dispatchEvent(new Event("change"));
+                    document.removeEventListener("pointerup", onPointerUp);
+                };
+
+                document.addEventListener("pointerup", onPointerUp);
+            };
         }
 
         function extractName(str) {
