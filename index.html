@@ -15,13 +15,14 @@
             <div class="navdiv">
                 <button class="btn" onClick="randomizeCSV()">⚅</button>
                 <div class="btn3">
-                    <button class="updbutton" id="menuBtn" style="height:25px;width:25px;">⇅</button>
+                    <button class="updbutton" id="menuBtn" style="height:25px;width:30px;">⇅</button>
                     <div id="menu" class="backlogoptions" style="display:none">
                         <input type="file" id="uploadBacklog" accept=".csv" style="display:none"
                             onchange="uploadBacklog(event)">
                         <button class="backlogbutton"
                             onclick="document.getElementById('uploadBacklog').click()">Import</button>
                         <button class="backlogbutton" onclick="downloadBacklog()">Export</button>
+                        <button class="backlogbutton" onclick="getDeck()">Get deck</button>
                     </div>
                 </div>
                 <button class="btn2" onClick="addBacklog()">Backlog</button>
@@ -39,9 +40,37 @@
         <div id="data"></div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
         let isBacklog = false;
         let current = 'core/' + 1 + 'all.csv';
+
+        async function getDeck() {
+            const backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
+            if (!backlog.length) return alert("Backlog is empty.");
+
+            // const TEMPLATE = row => `${row.cells[0]},${row.cells[1]},${row.cells[2]},${row.cells[3]},${row.cells[4]}`;
+            const TEMPLATE = row => `custom2	${row.cells[0]}	${row.cells[0]}	${row.cells[1]}		${row.cells[2]}		${row.cells[3]}	${row.cells[4]}					`;
+            const groups = {};
+            backlog.forEach(r => {
+                const key = r.cells.at(-1) || "default";
+                (groups[key] ||= []).push(r);
+            });
+
+            const zip = new JSZip();
+
+            Object.entries(groups).forEach(([groupName, rows]) => {
+                const lines = rows.map(r => TEMPLATE(r));
+                const csv = "#separator:tab\n#html:true\n#notetype column:1\n#tags column:13\n" + lines.join("\n");
+                zip.file(`${groupName}.csv`, csv);
+            });
+
+            const blob = await zip.generateAsync({ type: "blob" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "decks.zip";
+            a.click();
+        }
 
         function downloadBacklog() {
             const backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
