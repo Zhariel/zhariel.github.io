@@ -72,30 +72,38 @@
             a.click();
         }
 
-        function downloadBacklog() {
-            const backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
-            const csv = backlog.map(r => (r.cells || r).map(c => ("" + c).replace(/\r?\n/g, " ")).join(",")).join("\n");
-            const blob = new Blob([csv], { type: "text/csv" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = "backlog_" + new Date().toLocaleDateString('ja-JP') + ".csv";
-            a.click();
-        }
+    function downloadBacklog() {
+        const backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
 
-        function uploadBacklog(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            file.text().then(text => {
-                const rows = text.split("\n").map(r => ({
-                    cells: r.split(","),
-                    color: null
-                }));
-                localStorage.setItem("backlog_", JSON.stringify(rows));
-                alert("Uploaded backlog.");
-                document.getElementById('menu').style.display = 'none';
-                addBacklog();
+        const csv = backlog.map(r =>
+            [...r.cells.map(c => ("" + c).replace(/\r?\n/g, " ")), r.color || ""]
+                .join(",")
+        ).join("\n");
+
+        const blob = new Blob([csv], { type: "text/csv" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "backlog_" + new Date().toLocaleDateString('ja-JP') + ".csv";
+        a.click();
+    }
+
+    function uploadBacklog(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        file.text().then(text => {
+            const rows = text.split("\n").map(r => {
+                const cells = r.split(",");
+                const color = cells.pop() || null;
+                return { cells, color };
             });
-        }
+
+            localStorage.setItem("backlog_", JSON.stringify(rows));
+            alert("Uploaded backlog.");
+            document.getElementById('menu').style.display = 'none';
+            addBacklog();
+        });
+    }
 
         document.getElementById("menuBtn").onclick = () => {
             const m = document.getElementById("menu");
