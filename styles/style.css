@@ -36,7 +36,7 @@ table {
 }
 
 .row-purple {
-    box-shadow: inset 5px 0px 0px rgba(130,70,255,0.8);
+    box-shadow: inset 5px 0px 0px rgba(130,70,255,0.6);
     background-color: rgba(70,20,200,0.8);
 }
 
