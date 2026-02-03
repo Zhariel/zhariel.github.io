@@ -233,8 +233,9 @@
                         const color = row.dataset.color || "";
                         menu.innerHTML = color
                             ? `<div class="menu-item" data-action="clear">Clear</div>`
-                            : `<div class="menu-item" data-color="blue">Blue</div>
-                   <div class="menu-item" data-color="teal">Teal</div>`;
+                            : `<div class="menu-item" data-color="purple">Purple</div>
+                        <div class="menu-item" data-color="blue">Blue</div>
+                        <div class="menu-item" data-color="teal">Teal</div>`;
                         menu.style.left = e.pageX + "px";
                         menu.style.top = e.pageY + "px";
                         menu.classList.add("visible");
@@ -242,7 +243,7 @@
                         menu.querySelectorAll(".menu-item").forEach(item => {
                             item.onclick = () => {
                                 const idx = row.dataset.index;
-                                row.classList.remove("row-teal", "row-blue");
+                                row.classList.remove("row-teal", "row-blue", "row-purple");
                                 delete row.dataset.color;
 
                                 if (item.dataset.color) {
@@ -414,7 +415,7 @@
             const t = document.getElementById("vocabList");
             if (!t) return;
             const rows = [...t.rows];
-            const order = { blue: 1, teal: 2, "": 3 };
+            const order = { blue: 1, teal: 2, purple: 3 };
 
             const groups = {};
             rows.forEach(r => {
