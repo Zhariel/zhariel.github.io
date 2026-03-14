@@ -319,7 +319,7 @@ ul {
             display: block;
             margin: 12px -12px;
             padding: 0;
-            background: #0373fc;
+            background: #0c38c9;
             border: 2px solid transparent;
             border-radius: 5px;
             transition: opacity 0.2s, visibility 0.2s;
@@ -338,7 +338,7 @@ ul {
         }
 
         &:hover {
-            background: #0d327a;
+            background: #090780;
             border: 2px solid #FFFFFF;
 
             ul {

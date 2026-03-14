@@ -159,33 +159,35 @@
             document.body.classList.toggle('show-furigana', e.target.checked);
         });
 
-        function renderNavbar() {
-            let html = '';
-            let counter = 1
-            const data = fetch('source.json')
-                .then(response => response.json())
-                .then(data => data.forEach(item => {
-                    html += `<li><p>${counter}</p><ul>`
-                    item.forEach(it => {
-                        html += `<li><a class="" onClick="addWordList('core/${counter}${it}.csv')">${it}</a></li>`
-                    })
-                    html += `</ul></li>`
-                    counter++
-                }))
-                .then(_ => {
-                    res = `<li><p>中国</p><ul>`
-                    // res += `<li><a class="" onClick="addWordList('chinese/hsk1.csv')">Radicals</a></li>`
-                    res += `<li><a class="" onClick="addWordList('chinese/hsk1.csv')">HSK1</a></li><li><a class="" onClick="addWordList('chinese/hsk2.csv')">HSK2</a></li>`
-                    res += `<li><a class="" onClick="addWordList('chinese/hsk3.csv')">HSK3</a></li><li><a class="" onClick="addWordList('chinese/hsk4.csv')">HSK4</a></li>`
-                    res += `<li><a class="" onClick="addWordList('chinese/hsk5.csv')">HSK5</a></li><li><a class="" onClick="addWordList('chinese/hsk6.csv')">HSK6</a></li></ul>`
-                    res += `<li><p>Jlpt</p><ul><li><a class="" onClick="addWordList('jlpt/n5.csv')">N5</a></li>`
-                    res += `<li><a class="" onClick="addWordList('jlpt/n4.csv')">N4</a></li><li><a class="" onClick="addWordList('jlpt/n3.csv')">N3</a></li></ul></li>`
-                    res += html
-                    document.getElementById('navbar').innerHTML = res;
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
+function renderNavbar() {
+    let html = '';
+    let counter = 1
+    const data = fetch('source.json')
+        .then(response => response.json())
+        .then(data => {
+            let coreHtml = '<li><p>Core</p><ul>';
+            data.forEach(item => {
+                coreHtml += `<li><p>${counter}</p><ul>`;
+                item.forEach(it => {
+                    coreHtml += `<li><a class="" onClick="addWordList('core/${counter}${it}.csv')">${it}</a></li>`;
+                });
+                coreHtml += `</ul></li>`;
+                counter++;
+            });
+            coreHtml += '</ul></li>';
+            
+            // Build the rest of the navbar
+            res = `<li><p>Jlpt</p><ul><li><a class="" onClick="addWordList('jlpt/n5.csv')">N5</a></li>`;
+            res += `<li><a class="" onClick="addWordList('jlpt/n4.csv')">N4</a></li><li><a class="" onClick="addWordList('jlpt/n3.csv')">N3</a></li></ul></li>`;
+            res += coreHtml;
+            res += `<li><p>中国</p><ul>`;
+            res += `<li><a class="" onClick="addWordList('chinese/hsk1.csv')">HSK1</a></li><li><a class="" onClick="addWordList('chinese/hsk2.csv')">HSK2</a></li>`;
+            res += `<li><a class="" onClick="addWordList('chinese/hsk3.csv')">HSK3</a></li><li><a class="" onClick="addWordList('chinese/hsk4.csv')">HSK4</a></li>`;
+            res += `<li><a class="" onClick="addWordList('chinese/hsk5.csv')">HSK5</a></li><li><a class="" onClick="addWordList('chinese/hsk6.csv')">HSK6</a></li></ul>`;
+            document.getElementById('navbar').innerHTML = res;
+        })
+        .catch(error => console.error('Error:', error));
+}
         let menu = document.getElementById("contextMenu");
         if (!menu) {
             menu = document.createElement("div");
