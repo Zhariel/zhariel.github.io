@@ -17,7 +17,7 @@
                 <div class="btn3">
                     <button class="updbutton" id="menuBtn" style="height:25px;width:30px;">⇅</button>
                     <div id="menu" class="backlogoptions" style="display:none">
-                        <input type="file" id="uploadBacklog" accept=".csv" style="display:none"
+                        <input type="file" id="uploadBacklog" accept=".json" style="display:none"
                             onchange="uploadBacklog(event)">
                         <button class="backlogbutton"
                             onclick="document.getElementById('uploadBacklog').click()">Import</button>
@@ -48,7 +48,6 @@
             const backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
             if (!backlog.length) return alert("Backlog is empty.");
 
-            // const TEMPLATE = row => `${row.cells[0]},${row.cells[1]},${row.cells[2]},${row.cells[3]},${row.cells[4]}`;
             const TEMPLATE = row => `custom2	${row.cells[0]}	${row.cells[0]}	${row.cells[1]}		${row.cells[2]}		${row.cells[3]}	${row.cells[4]}					`;
             const groups = {};
             backlog.forEach(r => {
@@ -71,38 +70,48 @@
             a.click();
         }
 
-    function downloadBacklog() {
-        const backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
+        function downloadBacklog() {
+            const allColors = {};
+            for (let key of Object.keys(localStorage)) {
+                if (key.startsWith("colors_")) {
+                    allColors[key] = JSON.parse(localStorage.getItem(key));
+                }
+            }
 
-        const csv = backlog.map(r =>
-            [...r.cells.map(c => ("" + c).replace(/\r?\n/g, " ")), r.color || ""]
-                .join(",")
-        ).join("\n");
+            const data = {
+                colors: allColors,
+                backlog: JSON.parse(localStorage.getItem("backlog_") || "[]")
+            };
 
-        const blob = new Blob([csv], { type: "text/csv" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "backlog_" + new Date().toLocaleDateString('ja-JP') + ".csv";
-        a.click();
-    }
+            const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "vocab_colors_" + new Date().toLocaleDateString('ja-JP') + ".json";
+            a.click();
+        }
 
-    function uploadBacklog(e) {
-        const file = e.target.files[0];
-        if (!file) return;
+        function uploadBacklog(e) {
+            const file = e.target.files[0];
+            if (!file) return;
 
-        file.text().then(text => {
-            const rows = text.split("\n").map(r => {
-                const cells = r.split(",");
-                const color = cells.pop() || null;
-                return { cells, color };
+            file.text().then(text => {
+                const data = JSON.parse(text);
+
+                if (data.colors) {
+                    Object.entries(data.colors).forEach(([key, value]) => {
+                        localStorage.setItem(key, JSON.stringify(value));
+                    });
+                }
+
+                if (data.backlog) {
+                    localStorage.setItem("backlog_", JSON.stringify(data.backlog));
+                }
+
+                alert("Uploaded colors and backlog.");
+                document.getElementById('menu').style.display = 'none';
+                location.reload();
             });
-
-            localStorage.setItem("backlog_", JSON.stringify(rows));
-            alert("Uploaded backlog.");
-            document.getElementById('menu').style.display = 'none';
-            addBacklog();
-        });
-    }
+        }
 
         document.getElementById("menuBtn").onclick = () => {
             const m = document.getElementById("menu");
@@ -159,35 +168,34 @@
             document.body.classList.toggle('show-furigana', e.target.checked);
         });
 
-function renderNavbar() {
-    let html = '';
-    let counter = 1
-    const data = fetch('source.json')
-        .then(response => response.json())
-        .then(data => {
-            let coreHtml = '<li><p>Core</p><ul>';
-            data.forEach(item => {
-                coreHtml += `<li><p>${counter}</p><ul>`;
-                item.forEach(it => {
-                    coreHtml += `<li><a class="" onClick="addWordList('core/${counter}${it}.csv')">${it}</a></li>`;
-                });
-                coreHtml += `</ul></li>`;
-                counter++;
-            });
-            coreHtml += '</ul></li>';
-            
-            // Build the rest of the navbar
-            res = `<li><p>Jlpt</p><ul><li><a class="" onClick="addWordList('jlpt/n5.csv')">N5</a></li>`;
-            res += `<li><a class="" onClick="addWordList('jlpt/n4.csv')">N4</a></li><li><a class="" onClick="addWordList('jlpt/n3.csv')">N3</a></li></ul></li>`;
-            res += coreHtml;
-            res += `<li><p>中国</p><ul>`;
-            res += `<li><a class="" onClick="addWordList('chinese/hsk1.csv')">HSK1</a></li><li><a class="" onClick="addWordList('chinese/hsk2.csv')">HSK2</a></li>`;
-            res += `<li><a class="" onClick="addWordList('chinese/hsk3.csv')">HSK3</a></li><li><a class="" onClick="addWordList('chinese/hsk4.csv')">HSK4</a></li>`;
-            res += `<li><a class="" onClick="addWordList('chinese/hsk5.csv')">HSK5</a></li><li><a class="" onClick="addWordList('chinese/hsk6.csv')">HSK6</a></li></ul>`;
-            document.getElementById('navbar').innerHTML = res;
-        })
-        .catch(error => console.error('Error:', error));
-}
+        function renderNavbar() {
+            let html = '';
+            let counter = 1
+            const data = fetch('source.json')
+                .then(response => response.json())
+                .then(data => {
+                    let coreHtml = '<li><p>Core</p><ul>';
+                    data.forEach(item => {
+                        coreHtml += `<li><p>${counter}</p><ul>`;
+                        item.forEach(it => {
+                            coreHtml += `<li><a class="" onClick="addWordList('core/${counter}${it}.csv')">${it}</a></li>`;
+                        });
+                        coreHtml += `</ul></li>`;
+                        counter++;
+                    });
+                    coreHtml += '</ul></li>';
+
+                    res = `<li><p>Jlpt</p><ul><li><a class="" onClick="addWordList('jlpt/n5.csv')">N5</a></li>`;
+                    res += `<li><a class="" onClick="addWordList('jlpt/n4.csv')">N4</a></li><li><a class="" onClick="addWordList('jlpt/n3.csv')">N3</a></li></ul></li>`;
+                    res += coreHtml;
+                    res += `<li><p>中国</p><ul>`;
+                    res += `<li><a class="" onClick="addWordList('chinese/hsk1.csv')">HSK1</a></li><li><a class="" onClick="addWordList('chinese/hsk2.csv')">HSK2</a></li>`;
+                    res += `<li><a class="" onClick="addWordList('chinese/hsk3.csv')">HSK3</a></li><li><a class="" onClick="addWordList('chinese/hsk4.csv')">HSK4</a></li>`;
+                    res += `<li><a class="" onClick="addWordList('chinese/hsk5.csv')">HSK5</a></li><li><a class="" onClick="addWordList('chinese/hsk6.csv')">HSK6</a></li></ul>`;
+                    document.getElementById('navbar').innerHTML = res;
+                })
+                .catch(error => console.error('Error:', error));
+        }
         let menu = document.getElementById("contextMenu");
         if (!menu) {
             menu = document.createElement("div");
@@ -212,11 +220,12 @@ function renderNavbar() {
             let prev = null;
             backlog.forEach((row, idx) => {
                 const group = row.cells.at(-1);
-                if (group !== prev && prev !== null) html += `<tr style="background:#444"><td colspan="${row.cells.length + 1}"></td></tr>`;
+                if (group !== prev && prev !== null) {
+                    html += `<tr class="category-divider"><td colspan="${row.cells.length + 1}" style="background:#444;height:2px;"></td></tr>`;
+                }
                 prev = group;
-
                 html += `<tr data-index="${idx}" ${row.color ? `data-color="${row.color}" class="row-${row.color}"` : ""}>
-            <td>${idx}</td>${row.cells.map(c => `<td class="vocab-cell">${c}</td>`).join('')}</tr>`;
+        <td>${idx}</td>${row.cells.map(c => `<td class="vocab-cell">${c}</td>`).join('')}</tr>`;
             });
             html += '</table>';
             document.getElementById('data').innerHTML = html;
@@ -279,9 +288,12 @@ function renderNavbar() {
                     let rows = csvText.split('\n');
                     if (randomize) rows = rows.sort(() => Math.random() - 0.5);
 
+                    const colorMap = JSON.parse(localStorage.getItem("colors_" + name) || "{}");
+
                     let html = '<table id="vocabList">';
                     rows.forEach((row, i) => {
-                        html += '<tr><td>' + i + '</td>';
+                        const rowColor = colorMap[i] || "";
+                        html += `<tr data-index="${i}" ${rowColor ? `data-color="${rowColor}" class="row-${rowColor}"` : ""}><td>${i}</td>`;
                         row.split(',').forEach(column => {
                             column = column.replace(/<rt>(.*?)<\/rt>/g, '<rt><span class="furigana">$1</span></rt>');
                             html += '<td class="vocab-cell">' + column + '</td>';
@@ -302,6 +314,40 @@ function renderNavbar() {
 
                     [...table.rows].forEach((row, i) => {
                         if (i && hidden.includes(i) && !randomize) collapse(row, i, name);
+
+                        row.oncontextmenu = e => {
+                            e.preventDefault();
+                            const color = row.dataset.color || "";
+                            menu.innerHTML = color
+                                ? `<div class="menu-item" data-action="clear">Clear</div>`
+                                : `<div class="menu-item" data-color="purple">Purple</div>
+               <div class="menu-item" data-color="blue">Blue</div>
+               <div class="menu-item" data-color="teal">Teal</div>`;
+                            menu.style.left = e.pageX + "px";
+                            menu.style.top = e.pageY + "px";
+                            menu.classList.add("visible");
+
+                            menu.querySelectorAll(".menu-item").forEach(item => {
+                                item.onclick = () => {
+                                    const idx = row.dataset.index;
+                                    row.classList.remove("row-teal", "row-blue", "row-purple");
+                                    delete row.dataset.color;
+
+                                    if (item.dataset.color) {
+                                        const cls = `row-${item.dataset.color}`;
+                                        row.classList.add(cls);
+                                        row.dataset.color = item.dataset.color;
+                                        colorMap[idx] = item.dataset.color;
+                                    } else {
+                                        delete colorMap[idx];
+                                    }
+
+                                    localStorage.setItem("colors_" + name, JSON.stringify(colorMap));
+                                    menu.classList.remove("visible");
+                                };
+                            });
+                        };
+
                         row.onclick = e => {
                             if (e.ctrlKey) {
                                 collapse(row, i, name);
@@ -314,7 +360,6 @@ function renderNavbar() {
                                 rowData.splice(5, 1);
                                 rowData.push(extractName(name));
 
-                                // Wrap as an object with color property
                                 const rowObj = { cells: rowData, color: null };
 
                                 if (!backlog.some(r => r.cells?.join() === rowObj.cells.join() || r.join?.() === rowObj.cells.join())) {
@@ -420,20 +465,37 @@ function renderNavbar() {
         function sortColoredRows() {
             const t = document.getElementById("vocabList");
             if (!t) return;
-            const rows = [...t.rows];
+            const rows = [...t.rows].filter(r => !r.classList.contains('category-divider'));
             const order = { purple: 1, blue: 2, teal: 3, "": 4 };
 
-            const groups = {};
-            rows.forEach(r => {
-                const cat = r.cells[r.cells.length - 1]?.textContent.trim() || "";
-                (groups[cat] ||= []).push(r);
-            });
+            if (isBacklog) {
+                rows.sort((a, b) => {
+                    const catA = a.cells[a.cells.length - 1]?.textContent.trim() || "";
+                    const catB = b.cells[b.cells.length - 1]?.textContent.trim() || "";
+                    if (catA !== catB) return catB.localeCompare(catA);
+                    return (order[a.dataset.color || ""] - order[b.dataset.color || ""]);
+                });
 
-            Object.values(groups).forEach(g => g.sort((a, b) =>
-                (order[a.dataset.color || ""] - order[b.dataset.color || ""])
-            ));
-
-            t.replaceChildren(...Object.values(groups).flat());
+                const grouped = {};
+                rows.forEach(r => {
+                    const cat = r.cells[r.cells.length - 1]?.textContent.trim() || "";
+                    (grouped[cat] ||= []).push(r);
+                });
+                const result = [];
+                Object.values(grouped).forEach((g, i, arr) => {
+                    result.push(...g);
+                    if (i < arr.length - 1) {
+                        const div = document.createElement('tr');
+                        div.className = 'category-divider';
+                        div.innerHTML = `<td colspan="${g[0].cells.length}" style="background:#444;height:2px;"></td>`;
+                        result.push(div);
+                    }
+                });
+                t.replaceChildren(...result);
+            } else {
+                rows.sort((a, b) => order[a.dataset.color || ""] - order[b.dataset.color || ""]);
+                t.replaceChildren(...rows);
+            }
         }
 
         addWordList(current)
