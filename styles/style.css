@@ -26,30 +26,30 @@ table {
 }
 
 .row-teal {
-    box-shadow: inset 5px 0px 0px rgba(0,255,255,0.3);
-    background-color: rgba(0,255,255,0.11);
+    box-shadow: inset 5px 0px 0px rgba(0, 255, 255, 0.3);
+    background-color: rgba(0, 255, 255, 0.11);
 }
 
 .row-blue {
-    box-shadow: inset 5px 0px 0px rgba(0,70,255,0.8);
-    background-color: rgba(0,70,255,0.3);
+    box-shadow: inset 5px 0px 0px rgba(0, 70, 255, 0.8);
+    background-color: rgba(0, 70, 255, 0.3);
 }
 
 .row-purple {
-    box-shadow: inset 5px 0px 0px rgba(130,70,255,0.6);
-    background-color: rgba(70,20,200,0.8);
+    box-shadow: inset 5px 0px 0px rgba(130, 70, 255, 0.6);
+    background-color: rgba(70, 20, 200, 0.8);
 }
 
 .row-teal:hover {
-    background-color: rgba(0,255,255,0.16);
+    background-color: rgba(0, 255, 255, 0.16);
 }
 
 .row-blue:hover {
-    background-color: rgba(0,70,255,0.45);
+    background-color: rgba(0, 70, 255, 0.45);
 }
 
 .row-purple:hover {
-    background-color: rgba(70,20,200,0.95);
+    background-color: rgba(70, 20, 200, 0.95);
 }
 
 td,
@@ -220,9 +220,16 @@ rt {
     font-size: 0.6em;
 }
 
-table.no-spacing {
-    border-spacing: 0;
-    border-collapse: collapse;
+.hint {
+    display: none;
+    font-size: 0.5em;
+    transform: translateY(2px);
+}
+
+
+.slider-on tr:active .hint {
+    display: block;
+    position: absolute;
 }
 
 body {

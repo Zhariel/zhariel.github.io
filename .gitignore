@@ -16,6 +16,7 @@
 .idea/*
 .idea/
 .vocab/jlpt/*.txt
+vocab/core_original/
 
 test.html
 *.py

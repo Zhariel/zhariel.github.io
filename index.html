@@ -164,8 +164,15 @@
             return particle;
         }
 
-        document.querySelector('.switch_1').addEventListener('change', e => {
-            document.body.classList.toggle('show-furigana', e.target.checked);
+        document.querySelectorAll('.switch_1').forEach(el => {
+            el.addEventListener('change', e => {
+                if (el.id === 'switch') {
+                    document.body.classList.toggle('show-furigana', e.target.checked);
+                }
+                if (el.id === 'toggleCol3Slider') {
+                    document.body.classList.toggle('slider-on', e.target.checked);
+                }
+            });
         });
 
         function renderNavbar() {
@@ -202,6 +209,7 @@
         }
 
         function addBacklog(randomize = false) {
+            document.getElementById("toggleCol3Slider").checked = false;
             isBacklog = true;
             let backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
             backlog.sort((a, b) => (b.cells.at(-1) || "").localeCompare(a.cells.at(-1) || ""));
@@ -276,6 +284,7 @@
         }
 
         function addWordList(name, randomize) {
+            document.getElementById("toggleCol3Slider").checked = false;
             isBacklog = false;
             current = name;
             fetch('vocab/' + name)
