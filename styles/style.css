@@ -25,6 +25,11 @@ table {
     cursor: pointer;
 }
 
+.row-white {
+    box-shadow: inset 5px 0px 0px rgba(255, 255, 255, 0.3);
+    background-color: rgba(110, 110, 110, 0.3);
+}
+
 .row-teal {
     box-shadow: inset 5px 0px 0px rgba(0, 255, 255, 0.3);
     background-color: rgba(0, 255, 255, 0.11);
@@ -37,7 +42,11 @@ table {
 
 .row-purple {
     box-shadow: inset 5px 0px 0px rgba(130, 70, 255, 0.6);
-    background-color: rgba(70, 20, 200, 0.8);
+    background-color: rgba(70, 20, 200, 0.6);
+}
+
+.row-white:hover {
+    background-color: rgba(150, 150, 150, 0.3);
 }
 
 .row-teal:hover {
@@ -49,7 +58,7 @@ table {
 }
 
 .row-purple:hover {
-    background-color: rgba(70, 20, 200, 0.95);
+    background-color: rgba(70, 20, 200, 0.8);
 }
 
 td,
@@ -225,7 +234,6 @@ rt {
     font-size: 0.5em;
     transform: translateY(2px);
 }
-
 
 .slider-on tr:active .hint {
     display: block;
