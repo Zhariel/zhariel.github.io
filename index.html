@@ -189,7 +189,10 @@
                     coreHtml += '</ul></li>';
 
                     res = `<li><p>Jlpt</p><ul><a class="" onClick="addWordList('jlpt/n5.csv')"><li>N5</li></a>`;
-                    res += `<a class="" onClick="addWordList('jlpt/n4.csv')"><li>N4</li></a><a class="" onClick="addWordList('jlpt/n3.csv')"><li>N3</li></a></ul></li>`;
+                    res += `<a class="" onClick="addWordList('jlpt/n4.csv')"><li>N4</li></a><a class="" onClick="addWordList('jlpt/n3.csv')"><li>N3</li></a>`;
+                    res += `<a class="" onClick="addWordList('grammar/n5.csv', false, true)"><li>N5 Grammar</li></a><a class="" onClick="addWordList('grammar/n4.csv', false, true)"><li>N4 Grammar</li></a>`
+                    res += `<a class="" onClick="addWordList('grammar/n3.csv', false, true)"><li>N3 Grammar</li></a><a class="" onClick="addWordList('grammar/n2.csv', false, true)"><li>N2 Grammar</li></a>`
+                    res += `<a class="" onClick="addWordList('grammar/n1.csv', false, true)"><li>N1 Grammar</li></a></ul></li>`
                     res += coreHtml;
                     res += `<li><p>中国</p><ul>`;
                     res += `<a class="" onClick="addWordList('chinese/hsk1.csv')"><li>HSK1</li></a><a class="" onClick="addWordList('chinese/hsk2.csv')"><li>HSK2</li></a>`;
@@ -284,7 +287,7 @@
             });
         }
 
-        function addWordList(name, randomize) {
+        function addWordList(name, randomize, isgrammar) {
             isBacklog = false;
             current = name;
             fetch('vocab/' + name)
@@ -309,6 +312,21 @@
                     document.getElementById('data').innerHTML = html;
                     resetCol3Slider();
 
+if (isgrammar) {
+    document.querySelectorAll('table tr').forEach(row => {
+        const cells = row.cells;
+        const targetCell = cells[1];
+        const thirdCell = cells[4];
+        if (targetCell && thirdCell) {
+            const url = thirdCell.textContent.trim().match(/https?:\/\/[^\s]+/);
+            if (url) {
+                targetCell.innerHTML = `<a href="${url[0]}" style="display:block;width:100%;height:100%;">${targetCell.innerHTML}</a>`;
+            }
+            thirdCell.remove();
+            cells[2].remove();
+        }
+    });
+}
                     if (document.getElementById('switch').checked) {
                         document.body.classList.add('show-furigana');
                     }
@@ -472,7 +490,7 @@
             const t = document.getElementById("vocabList");
             if (!t) return;
             const rows = [...t.rows].filter(r => !r.classList.contains('category-divider'));
-            const order = { purple: 1, blue: 2, teal: 3, white: 4, "": 5};
+            const order = { purple: 1, blue: 2, teal: 3, white: 4, "": 5 };
 
             if (isBacklog) {
                 rows.sort((a, b) => {
