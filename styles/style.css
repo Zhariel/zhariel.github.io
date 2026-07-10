@@ -8,10 +8,6 @@ a:visited {
     color: #ddd;
 }
 
-a:hover {
-    /* color: blue; */
-}
-
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
