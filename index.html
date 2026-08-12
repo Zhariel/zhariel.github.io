@@ -250,41 +250,46 @@
 
                 const isMobile = /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent);
                 if (!isMobile) {
-                    row.oncontextmenu = e => {
-                        e.preventDefault();
-                        const color = row.dataset.color || "";
-                        menu.innerHTML = color
-                            ? `<div class="menu-item" data-action="clear">Clear</div>`
-                            : `<div class="menu-item" data-color="purple">Purple</div>
+                    setColor(row)
+                }
+            });
+        }
+
+        function setColor(row, page, dataframe) {
+            row.oncontextmenu = e => {
+                e.preventDefault();
+                const color = row.dataset.color || "";
+                menu.innerHTML = color
+                    ? `<div class="menu-item" data-action="clear">Clear</div>`
+                    : `<div class="menu-item" data-color="red">Red</div>
+                        <div class="menu-item" data-color="purple">Purple</div>
                         <div class="menu-item" data-color="blue">Blue</div>
                         <div class="menu-item" data-color="teal">Teal</div>
                         <div class="menu-item" data-color="white">White</div>`;
-                        menu.style.left = e.pageX + "px";
-                        menu.style.top = e.pageY + "px";
-                        menu.classList.add("visible");
+                menu.style.left = e.pageX + "px";
+                menu.style.top = e.pageY + "px";
+                menu.classList.add("visible");
 
-                        menu.querySelectorAll(".menu-item").forEach(item => {
-                            item.onclick = () => {
-                                const idx = row.dataset.index;
-                                row.classList.remove("row-white", "row-teal", "row-blue", "row-purple");
-                                delete row.dataset.color;
+                menu.querySelectorAll(".menu-item").forEach(item => {
+                    item.onclick = () => {
+                        const idx = row.dataset.index;
+                        row.classList.remove("row-white", "row-teal", "row-blue", "row-purple", "row-red");
+                        delete row.dataset.color;
 
-                                if (item.dataset.color) {
-                                    const cls = `row-${item.dataset.color}`;
-                                    row.classList.add(cls);
-                                    row.dataset.color = item.dataset.color;
-                                    backlog[idx].color = item.dataset.color;
-                                } else {
-                                    backlog[idx].color = null;
-                                }
-
-                                localStorage.setItem("backlog_", JSON.stringify(backlog));
-                                menu.classList.remove("visible");
-                            };
-                        });
+                console.log("c")
+                        if (item.dataset.color) {
+                            const cls = `row-${item.dataset.color}`;
+                            row.classList.add(cls);
+                            row.dataset.color = item.dataset.color;
+                            dataframe[idx] = item.dataset.color;
+                        } else {
+                            delete dataframe[idx];
+                        }
+                        localStorage.setItem(page, JSON.stringify(dataframe));
+                        menu.classList.remove("visible");
                     };
-                }
-            });
+                });
+            };
         }
 
         function addWordList(name, randomize, isgrammar) {
@@ -312,21 +317,22 @@
                     document.getElementById('data').innerHTML = html;
                     resetCol3Slider();
 
-if (isgrammar) {
-    document.querySelectorAll('table tr').forEach(row => {
-        const cells = row.cells;
-        const targetCell = cells[1];
-        const thirdCell = cells[4];
-        if (targetCell && thirdCell) {
-            const url = thirdCell.textContent.trim().match(/https?:\/\/[^\s]+/);
-            if (url) {
-                targetCell.innerHTML = `<a href="${url[0]}" style="display:block;width:100%;height:100%;">${targetCell.innerHTML}</a>`;
-            }
-            thirdCell.remove();
-            cells[2].remove();
-        }
-    });
-}
+                    if (isgrammar) {
+                        document.querySelectorAll('table tr').forEach(row => {
+                            const cells = row.cells;
+                            const targetCell = cells[1];
+                            const thirdCell = cells[4];
+                            if (targetCell && thirdCell) {
+                                const url = thirdCell.textContent.trim().match(/https?:\/\/[^\s]+/);
+                                if (url) {
+                                    targetCell.innerHTML = `<a href="${url[0]}" style="display:block;width:100%;height:100%;">${targetCell.innerHTML}</a>`;
+                                }
+                                thirdCell.remove();
+                                cells[2].remove();
+                            }
+                        });
+                    }
+
                     if (document.getElementById('switch').checked) {
                         document.body.classList.add('show-furigana');
                     }
@@ -337,40 +343,7 @@ if (isgrammar) {
 
                     [...table.rows].forEach((row, i) => {
                         if (i && hidden.includes(i) && !randomize) collapse(row, i, name);
-
-                        row.oncontextmenu = e => {
-                            e.preventDefault();
-                            const color = row.dataset.color || "";
-                            menu.innerHTML = color
-                                ? `<div class="menu-item" data-action="clear">Clear</div>`
-                                : `<div class="menu-item" data-color="purple">Purple</div>
-               <div class="menu-item" data-color="blue">Blue</div>
-               <div class="menu-item" data-color="teal">Teal</div>
-               <div class="menu-item" data-color="white">White</div>`;
-                            menu.style.left = e.pageX + "px";
-                            menu.style.top = e.pageY + "px";
-                            menu.classList.add("visible");
-
-                            menu.querySelectorAll(".menu-item").forEach(item => {
-                                item.onclick = () => {
-                                    const idx = row.dataset.index;
-                                    row.classList.remove("row-white", "row-teal", "row-blue", "row-purple");
-                                    delete row.dataset.color;
-
-                                    if (item.dataset.color) {
-                                        const cls = `row-${item.dataset.color}`;
-                                        row.classList.add(cls);
-                                        row.dataset.color = item.dataset.color;
-                                        colorMap[idx] = item.dataset.color;
-                                    } else {
-                                        delete colorMap[idx];
-                                    }
-
-                                    localStorage.setItem("colors_" + name, JSON.stringify(colorMap));
-                                    menu.classList.remove("visible");
-                                };
-                            });
-                        };
+                        setColor(row, "colors_" + name, colorMap)                        
 
                         row.onclick = e => {
                             if (e.ctrlKey) {
@@ -490,7 +463,7 @@ if (isgrammar) {
             const t = document.getElementById("vocabList");
             if (!t) return;
             const rows = [...t.rows].filter(r => !r.classList.contains('category-divider'));
-            const order = { purple: 1, blue: 2, teal: 3, white: 4, "": 5 };
+            const order = { red: 0, purple: 1, blue: 2, teal: 3, white: 4, "": 5 };
 
             if (isBacklog) {
                 rows.sort((a, b) => {
