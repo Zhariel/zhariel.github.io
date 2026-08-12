@@ -276,7 +276,7 @@
                         row.classList.remove("row-white", "row-teal", "row-blue", "row-purple", "row-red");
                         delete row.dataset.color;
 
-                console.log("c")
+                        console.log("c")
                         if (item.dataset.color) {
                             const cls = `row-${item.dataset.color}`;
                             row.classList.add(cls);
@@ -295,24 +295,39 @@
         function addWordList(name, randomize, isgrammar) {
             isBacklog = false;
             current = name;
+
             fetch('vocab/' + name)
                 .then(response => response.text())
                 .then(csvText => {
-                    let rows = csvText.split('\n');
-                    if (randomize) rows = rows.sort(() => Math.random() - 0.5);
+                    let rows = csvText.split('\n').map((row, index) => ({
+                        text: row,
+                        originalIndex: index
+                    }));
 
-                    const colorMap = JSON.parse(localStorage.getItem("colors_" + name) || "{}");
+                    if (randomize) {rows.sort(() => Math.random() - 0.5);}
+
+                    const colorMap = JSON.parse(
+                        localStorage.getItem("colors_" + name) || "{}"
+                    );
 
                     let html = '<table id="vocabList">';
-                    rows.forEach((row, i) => {
-                        const rowColor = colorMap[i] || "";
-                        html += `<tr data-index="${i}" ${rowColor ? `data-color="${rowColor}" class="row-${rowColor}"` : ""}><td>${i}</td>`;
-                        row.split(',').forEach(column => {
-                            column = column.replace(/<rt>(.*?)<\/rt>/g, '<rt><span class="furigana">$1</span></rt>');
+
+                    rows.forEach((item, i) => {
+                        const rowColor = colorMap[item.originalIndex] || "";
+
+                        html += `<tr data-index="${item.originalIndex}" ${rowColor
+                                ? `data-color="${rowColor}" class="row-${rowColor}"`
+                                : ""}><td>${i}</td>`;
+
+                        item.text.split(',').forEach(column => {
+                            column = column.replace(/<rt>(.*?)<\/rt>/g,
+                                '<rt><span class="furigana">$1</span></rt>');
                             html += '<td class="vocab-cell">' + column + '</td>';
                         });
+
                         html += '</tr>';
                     });
+
                     html += '</table>';
                     document.getElementById('data').innerHTML = html;
                     resetCol3Slider();
@@ -341,9 +356,10 @@
                     let hidden = JSON.parse(localStorage.getItem("hiddenRows_" + name) || "[]");
                     let backlog = JSON.parse(localStorage.getItem("backlog_") || "[]");
 
-                    [...table.rows].forEach((row, i) => {
+                    [...table.rows].forEach(row => {
+                        const i = Number(row.dataset.index);
                         if (i && hidden.includes(i) && !randomize) collapse(row, i, name);
-                        setColor(row, "colors_" + name, colorMap)                        
+                        setColor(row, "colors_" + name, colorMap)
 
                         row.onclick = e => {
                             if (e.ctrlKey) {
