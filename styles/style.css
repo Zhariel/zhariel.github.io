@@ -73,11 +73,11 @@ table {
 }
 
 .row-purple:hover {
-    background-color: rgba(70, 20, 200, 0.7);
+    background-color: rgba(71, 20, 200, 0.653);
 }
 
 .row-red:hover {
-    background-color: rgba(232, 44, 85, 0.461);
+    background-color: rgba(232, 44, 85, 0.434);
 }
 
 td,
