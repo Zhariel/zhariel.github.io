@@ -35,6 +35,11 @@ table {
     cursor: pointer;
 }
 
+.row-black {
+    box-shadow: inset 5px 0px 0px rgba(255, 255, 255, 0.22);
+    background-color: rgba(4, 0, 0, 0.3);
+}
+
 .row-white {
     box-shadow: inset 5px 0px 0px rgba(255, 255, 255, 0.3);
     background-color: rgba(110, 110, 110, 0.3);
@@ -58,6 +63,10 @@ table {
 .row-red {
     box-shadow: inset 5px 0px 0px rgba(255, 70, 70, 0.6);
     background-color: rgba(191, 45, 77, 0.445);
+}
+
+.row-black:hover {
+    background-color: rgba(0, 0, 0, 0.402);
 }
 
 .row-white:hover {

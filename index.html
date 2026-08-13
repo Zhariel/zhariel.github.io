@@ -261,7 +261,7 @@
                 const color = row.dataset.color || "";
                 menu.innerHTML = color
                     ? `<div class="menu-item" data-action="clear">Clear</div>`
-                    : `<div class="menu-item" data-color="red">Red</div>
+                    : `<div class="menu-item" data-color="black">Black</div>
                         <div class="menu-item" data-color="purple">Purple</div>
                         <div class="menu-item" data-color="blue">Blue</div>
                         <div class="menu-item" data-color="teal">Teal</div>
@@ -479,7 +479,7 @@
             const t = document.getElementById("vocabList");
             if (!t) return;
             const rows = [...t.rows].filter(r => !r.classList.contains('category-divider'));
-            const order = { red: 0, purple: 1, blue: 2, teal: 3, white: 4, "": 5 };
+            const order = {black: 0, red: 1, purple: 2, blue: 3, teal: 4, white: 5, "": 6 };
 
             if (isBacklog) {
                 rows.sort((a, b) => {
