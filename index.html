@@ -248,14 +248,13 @@
                 };
                 // addHideEventListener(row);
 
-                const isMobile = /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent);
-                if (!isMobile) {
-                    setColor(row)
-                }
+                setColor(row)
             });
         }
 
         function setColor(row, page, dataframe) {
+            const isMobile = /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent);
+            if (isMobile) { return }
             row.oncontextmenu = e => {
                 e.preventDefault();
                 const color = row.dataset.color || "";
@@ -304,7 +303,7 @@
                         originalIndex: index
                     }));
 
-                    if (randomize) {rows.sort(() => Math.random() - 0.5);}
+                    if (randomize) { rows.sort(() => Math.random() - 0.5); }
 
                     const colorMap = JSON.parse(
                         localStorage.getItem("colors_" + name) || "{}"
@@ -316,8 +315,8 @@
                         const rowColor = colorMap[item.originalIndex] || "";
 
                         html += `<tr data-index="${item.originalIndex}" ${rowColor
-                                ? `data-color="${rowColor}" class="row-${rowColor}"`
-                                : ""}><td>${i}</td>`;
+                            ? `data-color="${rowColor}" class="row-${rowColor}"`
+                            : ""}><td>${i}</td>`;
 
                         item.text.split(',').forEach(column => {
                             column = column.replace(/<rt>(.*?)<\/rt>/g,
@@ -479,7 +478,7 @@
             const t = document.getElementById("vocabList");
             if (!t) return;
             const rows = [...t.rows].filter(r => !r.classList.contains('category-divider'));
-            const order = {black: 0, red: 1, purple: 2, blue: 3, teal: 4, white: 5, "": 6 };
+            const order = { black: 0, red: 1, purple: 2, blue: 3, teal: 4, white: 5, "": 6 };
 
             if (isBacklog) {
                 rows.sort((a, b) => {
