@@ -266,7 +266,7 @@ rt {
 .hint {
     display: none;
     font-size: 0.5em;
-    transform: translateY(2px);
+    transform: translateY(0px);
 }
 
 .slider-on tr:active .furi-hint {
