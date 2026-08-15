@@ -19,6 +19,10 @@
 vocab/jisho/source
 vocab/core_original/
 vocab/jlpt_original/
+vocab/core/hints/
+vocab/core/source/
+vocab/core/furigana/
+vocab/jlpt_original/
 
 
 test.html

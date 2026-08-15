@@ -257,10 +257,21 @@ rt {
     font-size: 0.6em;
 }
 
+.furi-hint {
+    display: none;
+    font-size: 0.5em;
+    transform: translateY(-8px);
+}
+
 .hint {
     display: none;
     font-size: 0.5em;
     transform: translateY(2px);
+}
+
+.slider-on tr:active .furi-hint {
+    display: block;
+    position: absolute;
 }
 
 .slider-on tr:active .hint {
