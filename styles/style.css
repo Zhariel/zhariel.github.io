@@ -45,19 +45,34 @@ table {
     background-color: rgba(110, 110, 110, 0.3);
 }
 
-.row-teal {
+/* .row-teal {
     box-shadow: inset 5px 0px 0px rgba(0, 255, 255, 0.3);
     background-color: rgba(0, 255, 255, 0.11);
+} */
+
+.row-teal {
+    box-shadow: inset 5px 0px 0px rgba(0, 255, 255, 0.346);
+    background-color: rgba(0, 49, 49, 0.756);
 }
 
-.row-blue {
+/* .row-blue {
     box-shadow: inset 5px 0px 0px rgba(0, 70, 255, 0.8);
     background-color: rgba(0, 70, 255, 0.3);
+} */
+
+.row-blue {
+    box-shadow: inset 5px 0px 0px rgb(1, 51, 187);
+    background-color: rgba(1, 32, 115, 0.3);
 }
 
-.row-purple {
+/* .row-purple {
     box-shadow: inset 5px 0px 0px rgba(130, 70, 255, 0.6);
     background-color: rgba(71, 20, 200, 0.533);
+} */
+
+.row-purple {
+    box-shadow: inset 5px 0px 0px rgba(162, 0, 255, 0.876);
+    background-color: rgba(33, 1, 116, 0.533);
 }
 
 .row-red {
@@ -135,6 +150,11 @@ th {
     height: 25px;
     width: 25px;
     right: 4%;
+}
+
+.tooltip{
+    right:-3%;
+    line-height: 1.7;
 }
 
 .btn:hover {
