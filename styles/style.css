@@ -85,19 +85,19 @@ table {
 }
 
 .row-white:hover {
-    background-color: rgba(150, 150, 150, 0.3);
+    background-color: rgba(136, 135, 135, 0.3);
 }
 
 .row-teal:hover {
-    background-color: rgba(0, 255, 255, 0.16);
+    background-color: rgba(1, 188, 188, 0.16);
 }
 
 .row-blue:hover {
-    background-color: rgba(0, 70, 255, 0.4);
+    background-color: rgba(0, 44, 166, 0.4);
 }
 
 .row-purple:hover {
-    background-color: rgba(71, 20, 200, 0.653);
+    background-color: rgba(50, 13, 144, 0.653);
 }
 
 .row-red:hover {
