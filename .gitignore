@@ -24,7 +24,9 @@ vocab/core/source/
 vocab/core/furigana/
 vocab/core/anki/
 vocab/jlpt_original/
+vocab/jlpt_original/
 
+vocab/grammare
 
 test.html
 *.py
