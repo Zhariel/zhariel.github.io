@@ -75,9 +75,14 @@ table {
     background-color: rgba(33, 1, 116, 0.533);
 }
 
-.row-red {
+/* .row-red {
     box-shadow: inset 5px 0px 0px rgba(255, 70, 70, 0.6);
     background-color: rgba(191, 45, 77, 0.445);
+} */
+
+.row-red {
+    box-shadow: inset 5px 0px 0px rgba(255, 70, 70, 0.6);
+    background-color: rgba(33, 1, 116, 0.533);
 }
 
 .row-black:hover {
@@ -101,7 +106,7 @@ table {
 }
 
 .row-red:hover {
-    background-color: rgba(232, 44, 85, 0.434);
+    background-color: rgba(50, 13, 144, 0.653);
 }
 
 td,

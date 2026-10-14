@@ -182,7 +182,7 @@
             const data = fetch('source.json')
                 .then(response => response.json())
                 .then(data => {
-                    let coreHtml = '<li><p>Core</p><ul>';
+                    let coreHtml = `<li><p>Core</p><ul><a class="" onClick="addWordList('all')"><li>All</li></a>`;
                     data.forEach(item => {
                         coreHtml += `<a class="" onClick="addWordList('core/${counter}all.csv')"><li>${counter}</li></a>`;
                         counter++;
@@ -264,6 +264,7 @@
                 menu.innerHTML = color
                     ? `<div class="menu-item" data-action="clear">Clear</div>`
                     : `<div class="menu-item" data-color="black">Black</div>
+                        <div class="menu-item" data-color="red">Red</div>
                         <div class="menu-item" data-color="purple">Purple</div>
                         <div class="menu-item" data-color="blue">Blue</div>
                         <div class="menu-item" data-color="teal">Teal</div>
@@ -297,6 +298,50 @@
         function addWordList(name, randomize, isgrammar) {
             isBacklog = false;
             current = name;
+
+            if (name === 'all') {
+                Promise.all(
+                    Array.from({ length: 10 }, (_, i) => {
+                        const file = `core/${i + 1}all.csv`;
+                        return fetch('vocab/' + file)
+                            .then(r => r.text())
+                            .then(csv => {
+                                const colors = JSON.parse(localStorage.getItem("colors_" + file) || "{}");
+                                return csv.split('\n')
+                                    .map((text, index) => ({
+                                        text,
+                                        color: colors[index],
+                                        file,
+                                        index
+                                    }))
+                                    .filter(row => ['black', 'red', 'purple'].includes(row.color));
+                            });
+                    })
+                ).then(results => {
+                    const rows = results.flat();
+                    let html = '<table id="vocabList">';
+
+                    rows.forEach((row, i) => {
+                        html += `<tr data-index="${row.index}" data-color="${row.color}" class="row-${row.color}"><td>${i}</td>`;
+                        row.text.split(',').forEach(column => {
+                            column = column.replace(/<rt>(.*?)<\/rt>/g,
+                                '<rt><span class="furigana">$1</span></rt>');
+                            html += '<td class="vocab-cell">' + column + '</td>';
+                        });
+                        html += '</tr>';
+                    });
+
+                    html += '</table>';
+                    document.getElementById('data').innerHTML = html;
+                    resetCol3Slider();
+
+                    if (document.getElementById('switch').checked) {
+                        document.body.classList.add('show-furigana');
+                    }
+                }).catch(error => console.error('Error fetching CSV:', error));
+
+                return;
+            }
 
             fetch('vocab/' + name)
                 .then(response => response.text())
